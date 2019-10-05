@@ -3,11 +3,17 @@ import { GameState } from './state';
 
 declare var PIXI: any;
 
+// Size of the virtual display (this gets scaled up to
+// fit the available/actual space on screen)
+const VIEW_WIDTH = 100;
+const VIEW_HEIGHT = 75;
+
 export class Game
 {
     private element: any;
     private renderer: any;
     private gameState: any;
+    private scale: number;
     
     constructor(element)
     {
@@ -19,10 +25,19 @@ export class Game
     /* Resize the rendering area to fill the available space */
     resize()
     {
-        // Make the rendering area fit the parent element area
+        // Make the rendering area fit the parent element area, but maintain
+        // the aspect ratio.
         let rect = this.element.getBoundingClientRect();
-        this.setupRenderer(rect.width, rect.height);
-        this.renderer.resize(rect.width, rect.height);
+        this.scale = Math.min(
+            rect.width/VIEW_WIDTH,
+            rect.height/VIEW_HEIGHT
+        );
+
+        let width = (VIEW_WIDTH*this.scale)|0;
+        let height = (VIEW_HEIGHT*this.scale)|0;
+
+        this.setupRenderer(width, height);
+        this.renderer.resize(width, height);
     }
 
     setupRenderer(width, height)
@@ -51,11 +66,16 @@ export class Game
         // Setup the main animation/update loop
         PIXI.Ticker.shared.add(
             time => {
-                let dt = time/1000.0
+                //let dt = time/100.0;
+                let dt = PIXI.Ticker.shared.deltaMS/1000.0;
                 if (this.gameState)
                 {
                     this.gameState.update(dt);
-                    this.gameState.render(this.renderer);
+                    let stage = this.gameState.stage;
+                    if (stage) {
+                        stage.scale.set(this.scale);
+                        this.renderer.render(stage);
+                    }
                 }
             }
         );

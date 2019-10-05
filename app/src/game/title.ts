@@ -1,4 +1,6 @@
 
+import { Resource, getTexture } from './resource';
+
 declare var PIXI: any;
 
 export class TitleScreen
@@ -13,7 +15,7 @@ export class TitleScreen
     {
         this.stage = new PIXI.Container();
         let sprite = new PIXI.Sprite(
-            PIXI.loader.resources['assets/out.png'].texture
+            getTexture(Resource.CHARS, 'player1.png')
         );
         sprite.x = 10;
         sprite.y = 50;
@@ -22,10 +24,5 @@ export class TitleScreen
 
     update(dt)
     {
-    }
-
-    render(renderer)
-    {
-        renderer.render(this.stage);
     }
 }
