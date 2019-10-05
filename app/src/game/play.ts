@@ -25,6 +25,7 @@ class Scenery
         this.offsetFunc = args && args.offsetFunc || null;
         this.container = new PIXI.Container();
         this.sprites = [];
+        this.tightFit = args && args.tightFit || false;
         let count = args && args.count || 1;
         let anchor = args && args.anchor || [0, 0];
 
@@ -52,12 +53,17 @@ class Scenery
             // Move the first sprite off the screen, and after the last sprite
             first.texture = choice(this.textures);
             this.sprites.shift();
-            //first.x = Math.max(last.x + last.width, 100);
+
             first.x = last.x + last.width;
-            if (this.offsetFunc) {
+            if (!this.tightFit) {
+                first.x = Math.max(first.x, 100);
+            }
+            
+            if (this.offsetFunc)
+            {
                 let offset = this.offsetFunc();
                 first.x += offset.x;
-                first.y += offset.y;
+                first.y = offset.y;
             }
             this.sprites.push(first);
         }
@@ -84,6 +90,7 @@ export class PlayScreen
             ],
             {
                 count: 2,
+                tightFit: true,
             }
         );
 
@@ -128,8 +135,8 @@ export class PlayScreen
         this.stage.addChild(this.trees.container);
         this.stage.addChild(this.bushes.container);
 
-        this.trees.container.y = 47;
-        this.bushes.container.y = 49;
+        this.trees.container.y = 46;
+        this.bushes.container.y = 48;
     }
 
     update(dt) {
