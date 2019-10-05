@@ -6,6 +6,7 @@ import sys
 import json
 import os
 import argparse
+import collections
 
 VISIBLE_LAYER = 0
 INVISIBLE_LAYER = 1
@@ -94,13 +95,15 @@ def parse_args():
             return args[0]
     return None
 
-def make_invisible(obj):
-    obj.layers[INVISIBLE_LAYER] = True
-    obj.layers[VISIBLE_LAYER] = False
+def make_invisible(group):
+    for obj in group:
+        obj.layers[INVISIBLE_LAYER] = True
+        obj.layers[VISIBLE_LAYER] = False
 
-def make_visible(obj):
-    obj.layers[VISIBLE_LAYER] = True
-    obj.layers[INVISIBLE_LAYER] = False
+def make_visible(group):
+    for obj in group:
+        obj.layers[VISIBLE_LAYER] = True
+        obj.layers[INVISIBLE_LAYER] = False
 
 def render_scene(dest=None):
     if not dest:
@@ -157,6 +160,33 @@ def difference_image(img1, img2):
 
     return (x_min, y_min), diff_img.crop((x_min, y_min, x_max, y_max))
 
+def get_thing_groups():
+    try:
+        state_text = bpy.data.texts['states']
+    except KeyError:
+        # Every thing is in it's own grouping
+        return {
+            obj.name : [obj]
+            for obj in bpy.context.scene.objects
+            if obj.name.startswith('obj_')
+        }
+
+    # Otherwise build the specified groups of objects
+    groups = collections.defaultdict(list)
+    state = ''
+    for line in state_text.as_string().split('\n'):
+        if not line:
+            continue
+
+        if line.endswith(':'):
+            state = line[0:-1]
+        else:
+            obj_name = line.strip()
+            obj = bpy.data.objects[obj_name]
+            groups[state].append(obj)
+
+    return groups
+
 if __name__ == '__main__':
     dest_json_path = parse_args()
     if not dest_json_path:
@@ -168,14 +198,11 @@ if __name__ == '__main__':
         sys.exit()
 
     # Collect the interactable things in the scene
-    things = []
-    for obj in bpy.context.scene.objects:
-        if obj.name.startswith('obj_'):
-            things.append(obj)
+    thing_groups = get_thing_groups()
 
     # Make all things invisible
-    for obj in things:
-        make_invisible(obj)
+    for group in thing_groups.values():
+        make_invisible(group)
 
     # Render the scene without any things in it (background only)
     bg_img = render_scene()
@@ -184,20 +211,20 @@ if __name__ == '__main__':
         ('background', bg_img),
     ]
     scene_data = {}
-    for count, obj in enumerate(things):
+    for group_name, group in thing_groups.items():
         # Make the thing visible, render the scene, find out how it differs from
         # the background image and save those changes.
-        make_visible(obj)
+        make_visible(group)
 
         thing_img = render_scene()
         (x, y), diff_img = difference_image(bg_img, thing_img)
         sprites.append(
-            (obj.name, diff_img)
+            (group_name, diff_img)
         )
 
-        scene_data[obj.name] = (x, y)
+        scene_data[group_name] = (x, y)
 
-        make_invisible(obj)
+        make_invisible(group)
 
     dest_img_path = os.path.splitext(dest_json_path)[0] + '.png'
     build_spritesheet(
