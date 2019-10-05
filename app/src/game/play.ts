@@ -22,7 +22,7 @@ class Scenery
     constructor(textures, args)
     {
         this.textures = textures;
-        this.gapFunc = args && args.gapFunc || null;
+        this.offsetFunc = args && args.offsetFunc || null;
         this.container = new PIXI.Container();
         this.sprites = [];
         let count = args && args.count || 1;
@@ -54,7 +54,11 @@ class Scenery
             this.sprites.shift();
             //first.x = Math.max(last.x + last.width, 100);
             first.x = last.x + last.width;
-            if (this.gapFunc) first.x += this.gapFunc();
+            if (this.offsetFunc) {
+                let offset = this.offsetFunc();
+                first.x += offset.x;
+                first.y += offset.y;
+            }
             this.sprites.push(first);
         }
     }
@@ -93,7 +97,12 @@ export class PlayScreen
             {
                 count: 10,
                 anchor: [0.5, 1],
-                gapFunc: function() { return randint(-5, 5); },
+                offsetFunc: function() {
+                    return {
+                        x: randint(-5, 5),
+                        y: randint(0, -1),
+                    }
+                },
             }
         );
 
@@ -106,7 +115,12 @@ export class PlayScreen
             {
                 count: 20,
                 anchor: [0.5, 1],
-                gapFunc: function() { return randint(0, 10); },
+                offsetFunc: function() {
+                    return {
+                        x: randint(-5, 5),
+                        y: randint(-2, 2),
+                    }
+                },
             }
         );
 
