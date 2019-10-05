@@ -3,10 +3,84 @@
 import PIL, PIL.Image
 import bpy
 import sys
+import json
+import os
 
 VISIBLE_LAYER = 0
 INVISIBLE_LAYER = 1
 TMP_FILE = '/tmp/out.png'
+
+def build_spritesheet(sprites, dest_img_path, dest_json_path, scene_data=None):
+    # Allocate a large image to contain the whole spritesheet
+    padding = 1
+    spacing = 1
+    width = 0
+    height = 0
+
+    for sprite_name, img in sprites:
+        width = max(width, img.size[0])
+        height += img.size[1]
+
+    width += 2*padding
+    height += (len(sprites) - 1)*spacing + 2*padding
+
+    # Now draw the sprites onto the sheet
+    x = padding
+    y = padding
+    mapping = {}
+    dest_img = PIL.Image.new('RGBA', (width, height))
+    for sprite_name, img in sprites:
+        mapping[sprite_name] = {
+            'frame' : {
+                'x' : x,
+                'y' : y,
+                'w' : img.size[0],
+                'h' : img.size[1]
+            },
+            'rotated' : False,
+            'trimmed' : False,
+            'spriteSourceSize' : {
+                'x' : 0,
+                'y' : 0,
+                'w' : img.size[0],
+                'h' : img.size[1]
+            },
+            'sourceSize' : {
+                'w' : img.size[0],
+                'h' : img.size[1]
+            },
+        }
+        dest_img.paste(img, (x, y))
+        y += spacing + img.size[1]
+
+    # Now output the spritesheet and accompanying json file
+    dest_img.save(dest_img_path)
+
+    doc = {
+        'frames' : {
+            sprite_name : mapping[sprite_name]
+            for sprite_name, sprite_img in sprites
+        },
+        'meta' : {
+            'app': 'build_scene.py',
+            'version': '1.0',
+            'image': os.path.basename(dest_img_path),
+            'format': 'RGBA8888',
+            'size': {'w' : width, 'h' : height},
+            'scale': 1,
+        },
+    }
+
+    if scene_data:
+        doc['scene'] = {
+            sprite_name: {
+                'x' : x,
+                'y' : y,
+            }
+            for sprite_name, (x, y) in scene_data.items()
+        }
+
+    open(dest_json_path, 'w').write(json.dumps(doc, indent=4))
 
 def make_invisible(obj):
     obj.layers[INVISIBLE_LAYER] = True
@@ -84,6 +158,10 @@ for obj in things:
 # Render the scene without any things in it (background only)
 bg_img = render_scene()
 
+sprites = [
+    ('background', bg_img),
+]
+scene_data = {}
 for count, obj in enumerate(things):
     # Make the thing visible, render the scene, find out how it differs from
     # the background image and save those changes.
@@ -91,6 +169,17 @@ for count, obj in enumerate(things):
 
     thing_img = render_scene()
     (x, y), diff_img = difference_image(bg_img, thing_img)
+    sprites.append(
+        (obj.name, diff_img)
+    )
+
+    scene_data[obj.name] = (x, y)
 
     make_invisible(obj)
 
+build_spritesheet(
+    sprites,
+    './app/src/assets/sprites.png',
+    './app/src/assets/sprites.json',
+    scene_data=scene_data,
+)
