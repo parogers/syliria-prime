@@ -157,55 +157,54 @@ def difference_image(img1, img2):
 
     return (x_min, y_min), diff_img.crop((x_min, y_min, x_max, y_max))
 
-dest_json_path = parse_args()
-if not dest_json_path:
-    print('you must include an output json path')
-    sys.exit()
+if __name__ == '__main__':
+    dest_json_path = parse_args()
+    if not dest_json_path:
+        print('you must include an output json path')
+        sys.exit()
 
-if not dest_json_path.endswith('.json'):
-    print('target output must be .json')
-    sys.exit()
+    if not dest_json_path.endswith('.json'):
+        print('target output must be .json')
+        sys.exit()
 
-# Collect the interactable things in the scene
-things = []
-for obj in bpy.context.scene.objects:
-    if obj.name.startswith('obj_'):
-        things.append(obj)
+    # Collect the interactable things in the scene
+    things = []
+    for obj in bpy.context.scene.objects:
+        if obj.name.startswith('obj_'):
+            things.append(obj)
 
-# Make all things invisible
-for obj in things:
-    make_invisible(obj)
+    # Make all things invisible
+    for obj in things:
+        make_invisible(obj)
 
-# Render the scene without any things in it (background only)
-bg_img = render_scene()
+    # Render the scene without any things in it (background only)
+    bg_img = render_scene()
 
-sprites = [
-    ('background', bg_img),
-]
-scene_data = {}
-for count, obj in enumerate(things):
-    # Make the thing visible, render the scene, find out how it differs from
-    # the background image and save those changes.
-    make_visible(obj)
+    sprites = [
+        ('background', bg_img),
+    ]
+    scene_data = {}
+    for count, obj in enumerate(things):
+        # Make the thing visible, render the scene, find out how it differs from
+        # the background image and save those changes.
+        make_visible(obj)
 
-    thing_img = render_scene()
-    (x, y), diff_img = difference_image(bg_img, thing_img)
-    sprites.append(
-        (obj.name, diff_img)
+        thing_img = render_scene()
+        (x, y), diff_img = difference_image(bg_img, thing_img)
+        sprites.append(
+            (obj.name, diff_img)
+        )
+
+        scene_data[obj.name] = (x, y)
+
+        make_invisible(obj)
+
+    dest_img_path = os.path.splitext(dest_json_path)[0] + '.png'
+    build_spritesheet(
+        sprites,
+        dest_img_path,
+        dest_json_path,
+        scene_data=scene_data,
     )
 
-    scene_data[obj.name] = (x, y)
-
-    make_invisible(obj)
-
-dest_img_path = os.path.join(
-    os.path.dirname(dest_json_path),
-    os.path.splitext(os.path.basename(dest_json_path))[0] + '.png'
-)
-
-build_spritesheet(
-    sprites,
-    dest_img_path,
-    dest_json_path,
-    scene_data=scene_data,
-)
+    print('Saved spritesheet: {}'.format(dest_json_path))
