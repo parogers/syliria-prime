@@ -200,7 +200,7 @@ for count, obj in enumerate(things):
 
 dest_img_path = os.path.join(
     os.path.dirname(dest_json_path),
-    os.path.splitext(dest_json_path)[0] + '.png'
+    os.path.splitext(os.path.basename(dest_json_path))[0] + '.png'
 )
 
 build_spritesheet(
