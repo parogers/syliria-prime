@@ -5,6 +5,7 @@ import bpy
 import sys
 import json
 import os
+import argparse
 
 VISIBLE_LAYER = 0
 INVISIBLE_LAYER = 1
@@ -82,6 +83,17 @@ def build_spritesheet(sprites, dest_img_path, dest_json_path, scene_data=None):
 
     open(dest_json_path, 'w').write(json.dumps(doc, indent=4))
 
+def parse_args():
+    try:
+        i = sys.argv.index('--')
+    except ValueError:
+        pass
+    else:
+        args = sys.argv[i+1:]
+        if args:
+            return args[0]
+    return None
+
 def make_invisible(obj):
     obj.layers[INVISIBLE_LAYER] = True
     obj.layers[VISIBLE_LAYER] = False
@@ -93,8 +105,8 @@ def make_visible(obj):
 def render_scene(dest=None):
     if not dest:
         dest = TMP_FILE
-    bpy.context.scene.render.resolution_x = 100
-    bpy.context.scene.render.resolution_y = 100
+    bpy.context.scene.render.resolution_x = 300
+    bpy.context.scene.render.resolution_y = 300
     bpy.context.scene.render.resolution_percentage = 100
     #bpy.context.scene.frame_start = 1
     #bpy.context.scene.frame_end = 1
@@ -145,6 +157,15 @@ def difference_image(img1, img2):
 
     return (x_min, y_min), diff_img.crop((x_min, y_min, x_max, y_max))
 
+dest_json_path = parse_args()
+if not dest_json_path:
+    print('you must include an output json path')
+    sys.exit()
+
+if not dest_json_path.endswith('.json'):
+    print('target output must be .json')
+    sys.exit()
+
 # Collect the interactable things in the scene
 things = []
 for obj in bpy.context.scene.objects:
@@ -177,9 +198,14 @@ for count, obj in enumerate(things):
 
     make_invisible(obj)
 
+dest_img_path = os.path.join(
+    os.path.dirname(dest_json_path),
+    os.path.splitext(dest_json_path)[0] + '.png'
+)
+
 build_spritesheet(
     sprites,
-    './app/src/assets/sprites.png',
-    './app/src/assets/sprites.json',
+    dest_img_path,
+    dest_json_path,
     scene_data=scene_data,
 )
