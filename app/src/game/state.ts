@@ -13,6 +13,7 @@ export class GameState
     private screen: any = null;
     private loadingScreen: any;
     private titleScreen: any;
+    private playScreen: any;
 
     constructor()
     {

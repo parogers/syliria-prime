@@ -1,5 +1,6 @@
 
 import { Resource, getTexture } from './resource';
+import { renderText } from './text';
 
 declare var PIXI: any;
 
@@ -18,6 +19,9 @@ class Scenery
     public container: any;
     private sprites: any;
     private textureFunc: any;
+    private textures: any;
+    private offsetFunc: any;
+    private tightFit: any;
 
     constructor(textures, args)
     {
@@ -76,6 +80,8 @@ export class PlayScreen
 {
     public stage: any;
     public scenery: any;
+    private trees: any;
+    private bushes: any;
 
     constructor() {
     }
@@ -137,6 +143,14 @@ export class PlayScreen
 
         this.trees.container.y = 46;
         this.bushes.container.y = 48;
+
+        // Example text
+        let textScale = 0.5;
+        let sprite = renderText('HELLO WORLD THIS IS A LARGER AMOUNT OF TEXT THAT SHOULD SPLIT MULTIPLE LINES. ANOTHER LINE HERE.', Resource.LETTERS, 200);
+        sprite.scale.set(textScale);
+        sprite.x = 5;
+        sprite.y = 5;
+        this.stage.addChild(sprite);
     }
 
     update(dt) {
