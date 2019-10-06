@@ -18,7 +18,8 @@ export class LoadingScreen
         PIXI.loader
             .add(Resource.CHARS)
             .add(Resource.FOREST)
-            .add(Resource.VEGETATION);
+            .add(Resource.VEGETATION)
+            .add(Resource.LETTERS);
 
         PIXI.loader.load(() => {
             console.log('done loading assets', PIXI.loader.resources);

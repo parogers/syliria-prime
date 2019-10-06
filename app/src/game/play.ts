@@ -1,5 +1,6 @@
 
 import { Resource, getTexture } from './resource';
+import { FadeInText } from './text';
 
 declare var PIXI: any;
 
@@ -18,6 +19,9 @@ class Scenery
     public container: any;
     private sprites: any;
     private textureFunc: any;
+    private textures: any;
+    private offsetFunc: any;
+    private tightFit: any;
 
     constructor(textures, args)
     {
@@ -76,6 +80,8 @@ export class PlayScreen
 {
     public stage: any;
     public scenery: any;
+    private trees: any;
+    private bushes: any;
 
     constructor() {
     }
@@ -137,11 +143,22 @@ export class PlayScreen
 
         this.trees.container.y = 46;
         this.bushes.container.y = 48;
+
+        // Example text
+        let textScale = 0.5;
+        let text = new FadeInText('HELLO WORLD THIS IS A LARGER AMOUNT OF TEXT THAT SHOULD SPLIT MULTIPLE LINES. ANOTHER LINE HERE.', 200);
+        text.container.scale.set(textScale);
+        text.container.x = 5;
+        text.container.y = 5;
+        this.stage.addChild(text.container);
+        this.text = text;
     }
 
     update(dt) {
         this.scenery.scroll(-20*dt);
         this.trees.scroll(-20*dt);
         this.bushes.scroll(-20*dt);
+
+        this.text.update(dt);
     }
 }
