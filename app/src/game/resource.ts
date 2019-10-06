@@ -13,6 +13,7 @@ export var Resource = {
     SWAMP: 'assets/media/swamp.png',
     DESERT: 'assets/media/desert.png',
     LETTERS: 'assets/media/letters.json',
+    GUI: 'assets/media/gui.json',
 };
 
 export function getTexture(resName, spriteName?)

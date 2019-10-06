@@ -22,22 +22,24 @@ import { FadeInText } from './text';
 import { Player } from './player';
 import { randint, choice } from './random';
 import { ForestLevel, SwampLevel, DesertLevel } from './level';
+import { DialogWindow } from './dialog';
 
 declare var PIXI: any;
-
-const STATE_PLAYER_ENTER = 0;
-const STATE_GAMEPLAY = 1;
-const STATE_PLAYER_EXIT = 2;
 
 /* The play screen is where most of the gameplay happens. It features a scrolling 
  * background and the player advancing to the right. */
 export class PlayScreen
 {
+    private STATE_INFO_DUMP = 0;
+    private STATE_PLAYER_ENTER = 1;
+    private STATE_GAMEPLAY = 2;
+    private STATE_PLAYER_EXIT = 3;
+
     private state: number;
     private _level: Level;
 
     constructor() {
-        this.state = STATE_PLAYER_ENTER;
+        this.state = this.STATE_INFO_DUMP;
         this.stage = new PIXI.Container();
     }
 
@@ -48,12 +50,21 @@ export class PlayScreen
 
         // Example text
         let textScale = 0.5;
-        let text = new FadeInText('WELCOME TO THE SYLIRIA PRIME GAME JAM DEMO! THIS IS CURRENTLY A WORK IN PROGRESS.', 175);
+        let text = new FadeInText('WELCOME TO THE SYLIRIA PRIME GAME JAM DEMO! THIS IS CURRENTLY A WORK IN PROGRESS.', 80);
         text.container.scale.set(textScale);
         text.container.x = 5;
         text.container.y = 5;
         this.stage.addChild(text.container);
         this.text = text;
+
+        this.window = new DialogWindow();
+        this.window.showContent('THIS IS THE INTRODUCTORY TEXT. THIS IS WHERE THE PLOT IS EXPLAINED.', ['OK']);
+        this.window.on('selected', response => {
+            this.window.close();
+            this.window = null;
+            this.state = this.STATE_PLAYER_ENTER;
+        });
+        this.stage.addChild(this.window.container);
 
         /*
         let sprite = new PIXI.Sprite(
@@ -88,29 +99,30 @@ export class PlayScreen
 
     update(dt)
     {
-        if (this.state === STATE_PLAYER_ENTER) {
+        if (this.state === this.STATE_PLAYER_ENTER) {
             // Player is entering the level
             this.player.sprite.x += this.player.movementSpeed*dt;
             this.player.sprite.y = this.level.roadPosY;
 
             if (this.player.sprite.x > this.level.roadPosX) {
                 this.player.sprite.x = this.level.roadPosX;
-                this.state = STATE_GAMEPLAY;
+                this.state = this.STATE_GAMEPLAY;
             }
             this.player.update(dt);
         }
-        else if (this.state === STATE_GAMEPLAY) {
+        else if (this.state === this.STATE_GAMEPLAY) {
             // Normal gameplay
             this.player.sprite.x = this.level.roadPosX;
             this.player.sprite.y = this.level.roadPosY;
             this.player.update(dt);
+            this.text.update(dt);
 
             this.level.update(dt);
             if (this.level.done) {
-                this.state = STATE_PLAYER_EXIT;
+                this.state = this.STATE_PLAYER_EXIT;
             }
         }
-        else if (this.state === STATE_PLAYER_EXIT) {
+        else if (this.state === this.STATE_PLAYER_EXIT) {
             // Player is leaving the level
             this.player.sprite.x += this.player.movementSpeed*dt;
             if (this.player.sprite.x > VIEW_WIDTH + 10)
@@ -120,6 +132,6 @@ export class PlayScreen
             }
             this.player.update(dt);
         }
-        this.text.update(dt);
+        if (this.window) this.window.update(dt);
     }
 }

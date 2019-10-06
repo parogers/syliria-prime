@@ -21,6 +21,9 @@ import { Resource, getTexture } from './resource';
 
 declare var PIXI: any;
 
+const TEXT_SCALE = 0.5;
+const DEFAULT_COLOR = 0xffffff;
+
 export class FadeInText
 {
     public container: any;
@@ -58,12 +61,19 @@ export class FadeInText
     }
 }
 
+
 /* 
  * Renders a block of text using the given font, under the maximum width 
  * provided. This returns a PIXI container holding the rendered text as
  * a collection of sprites. 
  */
 export function renderText(text, maxWidth)
+{
+    let result = renderTextToBox(text, maxWidth, -1);
+    return result.container;
+}
+
+export function renderTextToBox(text, maxWidth, maxHeight)
 {
     let vspacing = 2, hspacing = 1;
     let container = new PIXI.Container();
@@ -72,6 +82,12 @@ export function renderText(text, maxWidth)
     let word = [];
     let wordWidth = 0;
     let wordHeight = 0;
+
+    // Adjust the maximum text width based on how much we down scale it
+    maxWidth /= TEXT_SCALE;
+    maxHeight /= TEXT_SCALE;
+
+    container.scale.set(TEXT_SCALE);
 
     text += ' ';
     for (let n = 0; n < text.length; n++)
@@ -83,12 +99,20 @@ export function renderText(text, maxWidth)
         {
             // Emit the word
             if (x + wordWidth > maxWidth) {
+                // Not enough room - skip to the next line if possible
                 x = 0;
                 y += vspacing + wordHeight;
+                if (maxHeight > 0 && y + wordHeight > maxHeight)
+                {
+                    return {
+                        container: container,
+                        nextChar: n - word.length,
+                    };
+                }
             }
             for (let other of word) {
                 let sprite = new PIXI.Sprite(other);
-                //sprite.tint = 0xFF0000;
+                sprite.tint = DEFAULT_COLOR;
                 sprite.x = x;
                 sprite.y = y;
                 x += other.width + hspacing;
@@ -106,5 +130,8 @@ export function renderText(text, maxWidth)
         }
     }
 
-    return container;
+    return {
+        container: container,
+        nextChar: -1,
+    };
 }
