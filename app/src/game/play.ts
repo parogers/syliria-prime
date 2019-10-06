@@ -1,6 +1,7 @@
 
 import { Resource, getTexture } from './resource';
 import { FadeInText } from './text';
+import { Player } from './player';
 
 declare var PIXI: any;
 
@@ -82,6 +83,9 @@ export class PlayScreen
     public scenery: any;
     private trees: any;
     private bushes: any;
+    private player: any;
+    private roadPosX: number = 10;
+    private roadPosY: number = 65;
 
     constructor() {
     }
@@ -152,9 +156,30 @@ export class PlayScreen
         text.container.y = 5;
         this.stage.addChild(text.container);
         this.text = text;
+
+        /*
+        let sprite = new PIXI.Sprite(
+            getTexture(Resource.CHARS, 'player1.png')
+        );
+        sprite.x = 10;
+        sprite.y = 10;
+        this.stage.addChild(sprite);
+
+        sprite.interactive = true;
+        sprite.buttonMode = true;
+        sprite.on('pointerdown', () => {
+            console.log('click');
+        });*/
+
+        this.player = new Player();
+        this.stage.addChild(this.player.sprite);
     }
 
     update(dt) {
+        this.player.sprite.x = this.roadPosX;
+        this.player.sprite.y = this.roadPosY;
+        this.player.update(dt);
+        
         this.scenery.scroll(-20*dt);
         this.trees.scroll(-20*dt);
         this.bushes.scroll(-20*dt);
