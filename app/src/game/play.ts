@@ -22,6 +22,7 @@ import { FadeInText } from './text';
 import { Player } from './player';
 import { randint, choice } from './random';
 import { ForestLevel, SwampLevel, DesertLevel } from './level';
+import { DialogWindow } from './dialog';
 
 declare var PIXI: any;
 
@@ -54,6 +55,9 @@ export class PlayScreen
         text.container.y = 5;
         this.stage.addChild(text.container);
         this.text = text;
+
+        this.window = new DialogWindow('THIS IS SOMETHING', ['YES', 'NO']);
+        this.stage.addChild(this.window.container);
 
         /*
         let sprite = new PIXI.Sprite(
@@ -121,5 +125,6 @@ export class PlayScreen
             this.player.update(dt);
         }
         this.text.update(dt);
+        this.window.update(dt);
     }
 }

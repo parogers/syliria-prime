@@ -24,27 +24,91 @@ declare const PIXI: any;
 
 class Button
 {
+    private STATE_IDLE = 0;
+    private STATE_PRESSED = 1;
+    private STATE_RELEASE_TIMEOUT = 2;
+    private STATE_TRIGGER_TIMEOUT = 3;
+
     public container: any;
+    private textPosY: number = 2.75;
+    private state: number;
+    private timer: number;
 
     constructor(text, index)
     {
+        this.state = this.STATE_IDLE;
         this.text = text;
         this.index = index;
+        this.buttonUpTexture = getTexture(Resource.GUI, 'button-up');
+        this.buttonDownTexture = getTexture(Resource.GUI, 'button-down');
 
-        this.buttonSprite = new PIXI.Sprite(
-            getTexture(Resource.GUI, 'button-up')
-        );
-        
+        this.buttonSprite = new PIXI.Sprite(this.buttonUpTexture);
+
         this.container = new PIXI.Container();
         this.textSprite = renderText(text);
-        this.textSprite.x = 4;
-        this.textSprite.y = 2.75;
 
         this.container.addChild(this.buttonSprite);
         this.container.addChild(this.textSprite);
+
+        // Make the button interactable via PIXI
+        this.buttonSprite.buttonMode = true;
+        this.buttonSprite.interactive = true;
+        this.buttonSprite.on('pointerdown', () => this.handlePressed());
+        this.buttonSprite.on('pointerup', () => this.handleReleased());
+
+        this.showButtonUp();
     }
 
-    update(dt) {
+    showButtonUp() {
+        this.textSprite.x = 4;
+        this.textSprite.y = this.textPosY;
+        this.buttonSprite.texture = this.buttonUpTexture;
+    }
+
+    showButtonDown() {
+        this.textSprite.x = 4;
+        this.textSprite.y = this.textPosY + 1;
+        this.buttonSprite.texture = this.buttonDownTexture;
+    }
+
+    handlePressed()
+    {
+        if (this.state === this.STATE_IDLE)
+        {
+            this.state = this.STATE_PRESSED;
+            this.showButtonDown();
+        }
+    }
+
+    handleReleased()
+    {
+        if (this.state === this.STATE_PRESSED) {
+            // Have the button release after a short interval
+            this.state = this.STATE_RELEASE_TIMEOUT;
+            this.timer = 0.2;
+        }
+    }
+
+    update(dt)
+    {
+        if (this.state === this.STATE_RELEASE_TIMEOUT)
+        {
+            // Wait until releasing the button
+            this.timer -= dt;
+            if (this.timer <= 0) {
+                this.state = this.STATE_TRIGGER_TIMEOUT;
+                this.showButtonUp();
+            }
+        }
+        else if (this.state === this.STATE_TRIGGER_TIMEOUT)
+        {
+            // Wait until triggering the button callback
+            this.timer -= dt;
+            if (this.timer <= 0) {
+                this.state = this.STATE_IDLE;
+                console.log('trigger');
+            }
+        }
     }
 }
 
