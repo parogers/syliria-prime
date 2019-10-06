@@ -272,8 +272,9 @@ export class MessageBox
     private callbackFunc: any;
     public closed: boolean = false;
 
-    constructor(text)
+    constructor(text, buttonText?)
     {
+        if (buttonText === undefined) buttonText = 'OK';
         this.container = new PIXI.Container();
         this.windowSprite = new PIXI.Sprite(
             getTexture(Resource.GUI, 'message-window')
@@ -285,7 +286,7 @@ export class MessageBox
         this.textSprite.y = this.textPosY;
         this.container.addChild(this.textSprite);
 
-        this.okayButton = new Button('OK');
+        this.okayButton = new Button(buttonText);
         this.okayButton.container.x = 21.5;
         this.okayButton.container.y = 21;
         this.okayButton.on(
