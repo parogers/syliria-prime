@@ -22,12 +22,13 @@ import { Animation } from './anim';
 
 export class Player
 {
-    // Player resources:
-    private food: number;
-    private water: number;
-    private money: number;
-    private firstAidKits: number;
     private anim: Animation;
+    // Player resources
+    public food: number = 0;
+    public water: number = 0;
+    public money: number = 0;
+    // Player condition
+    public health: number;
 
     constructor()
     {
