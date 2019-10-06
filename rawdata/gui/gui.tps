@@ -221,6 +221,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">holder2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,6,5</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,6,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">message-window.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -242,6 +255,7 @@
             <filename>button-down.png</filename>
             <filename>button-up.png</filename>
             <filename>message-window.png</filename>
+            <filename>holder2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

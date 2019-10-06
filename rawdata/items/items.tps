@@ -195,6 +195,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">gray-heart.png</key>
+            <key type="filename">orange-heart.png</key>
+            <key type="filename">red-heart.png</key>
+            <key type="filename">yellow-heart.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0,0</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9Paddings</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">radish.png</key>
             <key type="filename">waterdrop.png</key>
             <struct type="IndividualSpriteSettings">
@@ -216,6 +232,10 @@
             <filename>radish.png</filename>
             <filename>health.png</filename>
             <filename>coin.png</filename>
+            <filename>gray-heart.png</filename>
+            <filename>orange-heart.png</filename>
+            <filename>red-heart.png</filename>
+            <filename>yellow-heart.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
