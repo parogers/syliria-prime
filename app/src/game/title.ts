@@ -13,13 +13,6 @@ export class TitleScreen
 
     start()
     {
-        this.stage = new PIXI.Container();
-        let sprite = new PIXI.Sprite(
-            getTexture(Resource.CHARS, 'player1.png')
-        );
-        sprite.x = 10;
-        sprite.y = 50;
-        this.stage.addChild(sprite);
     }
 
     update(dt)

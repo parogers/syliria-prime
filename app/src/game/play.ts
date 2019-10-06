@@ -56,10 +56,10 @@ export class PlayScreen
 
         this.trees = new Scenery(
             [
-                getTexture(Resource.VEGETATION, 'tree1.png'),
-                getTexture(Resource.VEGETATION, 'tree2.png'),
-                getTexture(Resource.VEGETATION, 'tree3.png'),
-                getTexture(Resource.VEGETATION, 'tree4.png'),
+                getTexture(Resource.VEGETATION, 'tree1'),
+                getTexture(Resource.VEGETATION, 'tree2'),
+                getTexture(Resource.VEGETATION, 'tree3'),
+                getTexture(Resource.VEGETATION, 'tree4'),
             ],
             {
                 count: 10,
@@ -75,9 +75,9 @@ export class PlayScreen
 
         this.bushes = new Scenery(
             [
-                getTexture(Resource.VEGETATION, 'bush1.png'),
-                getTexture(Resource.VEGETATION, 'bush2.png'),
-                getTexture(Resource.VEGETATION, 'bush3.png'),
+                getTexture(Resource.VEGETATION, 'bush1'),
+                getTexture(Resource.VEGETATION, 'bush2'),
+                getTexture(Resource.VEGETATION, 'bush3'),
             ],
             {
                 count: 20,
@@ -109,7 +109,7 @@ export class PlayScreen
 
         /*
         let sprite = new PIXI.Sprite(
-            getTexture(Resource.CHARS, 'player1.png')
+            getTexture(Resource.CHARS, 'player1')
         );
         sprite.x = 10;
         sprite.y = 10;

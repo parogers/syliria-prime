@@ -32,8 +32,8 @@ export class Player
     constructor()
     {
         this.anim = new Animation([
-            getTexture(Resource.CHARS, 'player2.png'),
-            getTexture(Resource.CHARS, 'player3.png'),
+            getTexture(Resource.CHARS, 'player2'),
+            getTexture(Resource.CHARS, 'player3'),
         ], 8);
         this.sprite = new PIXI.Container();
 
