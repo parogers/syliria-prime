@@ -17,7 +17,7 @@
  * See LICENSE.txt for the full text of the license.
  */
 
-import { Resource, getTexture } from './resource';
+import { Resource, getTexture, VIEW_HEIGHT } from './resource';
 import { renderText } from './text';
 import { Health } from './player';
 
@@ -153,6 +153,39 @@ class ItemSlot
     }
 }
 
+class ProgressBar
+{
+    public container: any;
+    public totalDistance: number = 100;
+    public distance: number = 0;
+    private travelStartX: number = 6;
+    private travelLength: number = 90;
+
+    constructor()
+    {
+        this.container = new PIXI.Container();
+        this.backgroundSprite = new PIXI.Sprite(
+            getTexture(Resource.GUI, 'progress')
+        );
+        this.container.addChild(this.backgroundSprite);
+
+        this.markerSprite = new PIXI.Sprite(
+            getTexture(Resource.GUI, 'mapmarker')
+        );
+        this.markerSprite.anchor.set(0.5);
+        this.markerSprite.y = this.backgroundSprite.texture.height/2;
+        this.container.addChild(this.markerSprite);
+    }
+
+    update(dt)
+    {
+        this.markerSprite.x = (
+            this.travelStartX +
+            this.travelLength*this.distance/this.totalDistance
+        );
+    }
+}
+
 /* The "heads-up display" GUI that shows basic game state and gives
  * the player something to click on. */
 export class HUD
@@ -163,6 +196,7 @@ export class HUD
     private money: any;
     private health: any;
     private player: any;
+    private progress: any;
 
     constructor(player)
     {
@@ -178,16 +212,19 @@ export class HUD
             getTexture(Resource.ITEMS, 'coin')
         );
         this.health = new HealthSlot();
+        this.progress = new ProgressBar();
 
-        this.food.container.x = 0;
-        this.water.container.x = 13;
-        this.money.container.x = 26;
-        this.health.container.x = 39;
+        this.food.container.position.set(1, 1);
+        this.water.container.position.set(14, 1);
+        this.money.container.position.set(27, 1);
+        this.health.container.position.set(40, 1);
+        this.progress.container.position.set(0, VIEW_HEIGHT - 10);
 
         this.container.addChild(this.food.container);
         this.container.addChild(this.water.container);
         this.container.addChild(this.money.container);
         this.container.addChild(this.health.container);
+        this.container.addChild(this.progress.container);
     }
 
     update(dt)
@@ -202,6 +239,7 @@ export class HUD
         this.water.update(dt);
         this.money.update(dt);
         this.health.update(dt);
+        this.progress.update(dt);
     }
 }
 

@@ -41,7 +41,7 @@ export class LoadingScreen
         }
 
         PIXI.loader.load(() => {
-            console.log('done loading assets', PIXI.loader.resources);
+            console.log('done loading assets');
 
             // Clean up texture names by removing the trailing '.png' extensions
             // (included automatically by TexturePacker)

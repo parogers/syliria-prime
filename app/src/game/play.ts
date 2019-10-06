@@ -51,8 +51,6 @@ export class PlayScreen
         this.level = new ForestLevel();
 
         this.hud = new HUD();
-        this.hud.container.x = 1;
-        this.hud.container.y = 1;
         this.hud.player = this.player;
         this.stage.addChild(this.hud.container);
 
