@@ -60,14 +60,11 @@ class ItemHolder
     {
         if (this._quantity !== value)
         {
-            let display = '--';
-            if (value > 0) display = '' + value;
-
             this._quantity = value;
             this.textContainer.removeChildren();
             this.textContainer.addChild(
                 renderText(
-                    display, -1,
+                    '' + value, -1,
                     { color: 0 }
                 )
             );
@@ -83,6 +80,7 @@ class HUD
     public container: any;
     private food: any;
     private water: any;
+    private money: any;
     private health: any;
     private player: any;
 
@@ -96,14 +94,17 @@ class HUD
         this.water = new ItemHolder(
             getTexture(Resource.ITEMS, 'waterdrop')
         );
+        this.money = new ItemHolder(
+            getTexture(Resource.ITEMS, 'coin')
+        );
 
         this.food.container.x = 0;
-        this.food.container.y = 0;
-
-        this.water.container.x = 14;
+        this.water.container.x = 13;
+        this.money.container.x = 26;
 
         this.container.addChild(this.food.container);
         this.container.addChild(this.water.container);
+        this.container.addChild(this.money.container);
     }
 
     update(dt)
@@ -111,6 +112,7 @@ class HUD
         if (this.player) {
             this.food.quantity = this.player.food;
             this.water.quantity = this.player.water;
+            this.money.quantity = this.player.money;
         }
     }
 }
@@ -139,7 +141,7 @@ export class PlayScreen
         this.level = new ForestLevel();
 
         this.hud = new HUD();
-        this.hud.container.x = 2;
+        this.hud.container.x = 1;
         this.hud.container.y = 1;
         this.hud.player = this.player;
         this.stage.addChild(this.hud.container);
