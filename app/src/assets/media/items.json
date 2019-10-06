@@ -1,8 +1,16 @@
 {"frames": {
 
+"coin.png":
+{
+	"frame": {"x":1,"y":1,"w":6,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":6},
+	"sourceSize": {"w":6,"h":6}
+},
 "health.png":
 {
-	"frame": {"x":1,"y":1,"w":9,"h":9},
+	"frame": {"x":8,"y":1,"w":9,"h":9},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":9,"h":9},
@@ -10,7 +18,7 @@
 },
 "radish.png":
 {
-	"frame": {"x":11,"y":1,"w":8,"h":8},
+	"frame": {"x":18,"y":1,"w":8,"h":8},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":8},
@@ -18,7 +26,7 @@
 },
 "waterdrop.png":
 {
-	"frame": {"x":20,"y":1,"w":8,"h":9},
+	"frame": {"x":27,"y":1,"w":8,"h":9},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":9},
@@ -29,8 +37,8 @@
 	"version": "1.0",
 	"image": "items.png",
 	"format": "RGBA8888",
-	"size": {"w":29,"h":11},
+	"size": {"w":36,"h":11},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:5743673d1fc87560d46eb96273735fab:18d2cee423540896530f3241d254c207:110e074689c9edd2c54833ce2e4d9270$"
+	"smartupdate": "$TexturePacker:SmartUpdate:0e6f03c4c69e8bf3dfbddc2dbc45fa7c:b5279cbbe929d5b8915c6109eb93e887:110e074689c9edd2c54833ce2e4d9270$"
 }
 }

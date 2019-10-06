@@ -26,11 +26,11 @@
 },
 "holder.png":
 {
-	"frame": {"x":1,"y":87,"w":12,"h":15},
+	"frame": {"x":1,"y":87,"w":12,"h":16},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":15},
-	"sourceSize": {"w":12,"h":15}
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":16},
+	"sourceSize": {"w":12,"h":16}
 },
 "message-window.png":
 {
@@ -47,6 +47,6 @@
 	"format": "RGBA8888",
 	"size": {"w":102,"h":120},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:cdc8182d3b64be23c01a04d669f999c9:50032a7ea7ed57b9b61dbb1fd815563e:788b34ed4e778d63c84b2c3df4d44949$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5cbfb351d89d3b0cc6687007a4e9ae0b:f44c6361f8ebd54a986ef5b215cedbaa:788b34ed4e778d63c84b2c3df4d44949$"
 }
 }
