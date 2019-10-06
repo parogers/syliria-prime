@@ -20,17 +20,26 @@
 import { Resource, getTexture } from './resource';
 import { Animation } from './anim';
 
+export const Health = {
+    GOOD: 4,
+    FAIR: 3,
+    POOR: 2,
+    BAD: 1,
+};
+
 export class Player
 {
-    // Player resources:
-    private food: number;
-    private water: number;
-    private money: number;
-    private firstAidKits: number;
     private anim: Animation;
+    // Player resources
+    public food: number = 0;
+    public water: number = 0;
+    public money: number = 0;
+    // Player condition
+    public health: number;
 
     constructor()
     {
+        this.health = Health.GOOD;
         this.anim = new Animation([
             getTexture(Resource.CHARS, 'player2'),
             getTexture(Resource.CHARS, 'player3'),

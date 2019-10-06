@@ -32,7 +32,7 @@ export class ForestLevel
     private roadPosX: number = 10;
     private roadPosY: number = 65;
     public player: any;
-    private distanceToEnd: number = 100;
+    private totalDistance: number = 100;
     private distance: number = 0;
 
     constructor()
@@ -96,7 +96,7 @@ export class ForestLevel
 
     get done()
     {
-        return this.distance >= this.distanceToEnd;
+        return this.distance >= this.totalDistance;
     }
 
     update(dt)
@@ -123,7 +123,7 @@ export class SwampLevel
     private roadPosX: number = 10;
     private roadPosY: number = 62;
     public player: any;
-    private distanceToEnd: number = 2000;
+    private totalDistance: number = 2000;
     private distance: number = 0;
 
     constructor()
@@ -142,7 +142,7 @@ export class SwampLevel
 
     get done()
     {
-        return this.distance >= this.distanceToEnd;
+        return this.distance >= this.totalDistance;
     }
 
     update(dt)
@@ -161,7 +161,7 @@ export class DesertLevel
     private roadPosX: number = 10;
     private roadPosY: number = 68;
     public player: any;
-    private distanceToEnd: number = 2000;
+    private totalDistance: number = 2000;
     private distance: number = 0;
 
     constructor()
@@ -180,7 +180,7 @@ export class DesertLevel
 
     get done()
     {
-        return this.distance >= this.distanceToEnd;
+        return this.distance >= this.totalDistance;
     }
 
     update(dt)

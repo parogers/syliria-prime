@@ -23,6 +23,7 @@ import { Player } from './player';
 import { randint, choice } from './random';
 import { ForestLevel, SwampLevel, DesertLevel } from './level';
 import { DialogWindow } from './dialog';
+import { HUD } from './hud';
 
 declare var PIXI: any;
 
@@ -37,6 +38,7 @@ export class PlayScreen
 
     private state: number;
     private _level: Level;
+    private hud: any;
 
     constructor() {
         this.state = this.STATE_INFO_DUMP;
@@ -48,14 +50,18 @@ export class PlayScreen
         this.player = new Player();
         this.level = new ForestLevel();
 
-        // Example text
+        this.hud = new HUD();
+        this.hud.player = this.player;
+        this.stage.addChild(this.hud.container);
+
+        /*// Example text
         let textScale = 0.5;
         let text = new FadeInText('WELCOME TO THE SYLIRIA PRIME GAME JAM DEMO! THIS IS CURRENTLY A WORK IN PROGRESS.', 80);
         text.container.scale.set(textScale);
         text.container.x = 5;
         text.container.y = 5;
         this.stage.addChild(text.container);
-        this.text = text;
+        this.text = text;*/
 
         this.window = new DialogWindow();
         this.window.showContent('THIS IS THE INTRODUCTORY TEXT. THIS IS WHERE THE PLOT IS EXPLAINED.', ['OK']);
@@ -115,7 +121,7 @@ export class PlayScreen
             this.player.sprite.x = this.level.roadPosX;
             this.player.sprite.y = this.level.roadPosY;
             this.player.update(dt);
-            this.text.update(dt);
+            //this.text.update(dt);
 
             this.level.update(dt);
             if (this.level.done) {
@@ -133,5 +139,17 @@ export class PlayScreen
             this.player.update(dt);
         }
         if (this.window) this.window.update(dt);
+        this.hud.level = this.level;
+        this.hud.update(dt);
+
+
+        this.currentTime += dt;
+        if (this.currentTime - this.lastTime > 2) {
+            this.lastTime = this.currentTime;
+            this.player.money++;
+        }
     }
+
+    private currentTime: number = 0;
+    private lastTime: number = 0;
 }

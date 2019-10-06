@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../app/src/assets/media/gui.json</filename>
+                <filename>../../app/src/assets/media/items.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,63 +181,27 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">button-down.png</key>
-            <key type="filename">button-up.png</key>
+            <key type="filename">coin.png</key>
+            <key type="filename">health.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>8,3,15,6</rect>
+                <rect>2,2,5,5</rect>
                 <key>scale9Paddings</key>
-                <rect>8,3,15,6</rect>
+                <rect>2,2,5,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">dialog-window.png</key>
+            <key type="filename">gray-heart.png</key>
+            <key type="filename">orange-heart.png</key>
+            <key type="filename">red-heart.png</key>
+            <key type="filename">yellow-heart.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,19,50,37</rect>
-                <key>scale9Paddings</key>
-                <rect>25,19,50,37</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">holder.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>3,3,5,5</rect>
-                <key>scale9Paddings</key>
-                <rect>3,3,5,5</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">holder2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>3,3,6,5</rect>
-                <key>scale9Paddings</key>
-                <rect>3,3,6,5</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">mapmarker.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0,0</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
@@ -247,43 +211,31 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">message-window.png</key>
+            <key type="filename">radish.png</key>
+            <key type="filename">waterdrop.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>23,6,46,12</rect>
+                <rect>2,2,4,5</rect>
                 <key>scale9Paddings</key>
-                <rect>23,6,46,12</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">progress.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>25,3,50,5</rect>
-                <key>scale9Paddings</key>
-                <rect>25,3,50,5</rect>
+                <rect>2,2,4,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>dialog-window.png</filename>
-            <filename>holder.png</filename>
-            <filename>button-down.png</filename>
-            <filename>button-up.png</filename>
-            <filename>message-window.png</filename>
-            <filename>holder2.png</filename>
-            <filename>progress.png</filename>
-            <filename>mapmarker.png</filename>
+            <filename>waterdrop.png</filename>
+            <filename>radish.png</filename>
+            <filename>health.png</filename>
+            <filename>coin.png</filename>
+            <filename>gray-heart.png</filename>
+            <filename>orange-heart.png</filename>
+            <filename>red-heart.png</filename>
+            <filename>yellow-heart.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

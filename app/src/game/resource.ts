@@ -14,6 +14,7 @@ export var Resource = {
     DESERT: 'assets/media/desert.png',
     LETTERS: 'assets/media/letters.json',
     GUI: 'assets/media/gui.json',
+    ITEMS: 'assets/media/items.json',
 };
 
 export function getTexture(resName, spriteName?)
