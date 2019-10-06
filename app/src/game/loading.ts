@@ -18,6 +18,8 @@ export class LoadingScreen
         PIXI.loader
             .add(Resource.CHARS)
             .add(Resource.FOREST)
+            .add(Resource.SWAMP)
+            .add(Resource.DESERT)
             .add(Resource.VEGETATION)
             .add(Resource.LETTERS);
 

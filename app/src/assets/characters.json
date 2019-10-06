@@ -6,8 +6,7 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":7},
-	"sourceSize": {"w":6,"h":7},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":6,"h":7}
 },
 "player2.png":
 {
@@ -15,8 +14,7 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":7},
-	"sourceSize": {"w":6,"h":7},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":6,"h":7}
 },
 "player3.png":
 {
@@ -24,8 +22,15 @@
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":7},
-	"sourceSize": {"w":6,"h":7},
-	"anchor": {"x":0.5,"y":0.5}
+	"sourceSize": {"w":6,"h":7}
+},
+"shadow.png":
+{
+	"frame": {"x":1,"y":25,"w":6,"h":3},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":6,"h":3},
+	"sourceSize": {"w":6,"h":3}
 }},
 "animations": {
 	"player": ["player1.png","player2.png","player3.png"]
@@ -35,8 +40,8 @@
 	"version": "1.0",
 	"image": "characters.png",
 	"format": "RGBA8888",
-	"size": {"w":8,"h":25},
+	"size": {"w":8,"h":29},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:0609cd29dbfd732d34d1ea6a7309a836:fbe3cb0a686c1d7ff2346b5430bce358:a5fe7db4b869eb0f3e0b2940b9577ea8$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5a04da655af1f76d77e12d15948cd03d:08883f5392a52c57de2efee854393acf:a5fe7db4b869eb0f3e0b2940b9577ea8$"
 }
 }
