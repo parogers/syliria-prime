@@ -60,7 +60,7 @@ export class Game
             preserveDrawingBuffer: true,
             //clearBeforeRender: true
         });
-        this.renderer.plugins.interaction.destroy();
+        //this.renderer.plugins.interaction.destroy();
         this.element.appendChild(this.renderer.view);
 
         // Setup the main animation/update loop
