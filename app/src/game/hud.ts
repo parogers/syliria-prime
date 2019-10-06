@@ -86,6 +86,8 @@ class ItemSlot
 {
     public container: any;
     private _quantity: number = null;
+    private pulseTimer: number;
+    private pulseTimeout: number;
 
     constructor(itemTexture)
     {
@@ -123,10 +125,31 @@ class ItemSlot
                     { color: 0 }
                 )
             );
+            // Have the item "pulse" in response to the change in quantity
+            this.pulseTimer = 0;
+            this.pulseTimeout = 0.15;
         }
     }
 
-    update(dt) {
+    update(dt)
+    {
+        if (this.pulseTimer < this.pulseTimeout)
+        {
+            this.pulseTimer += dt;
+            if (this.pulseTimer >= this.pulseTimeout)
+            {
+                // Done pulsing
+                this.itemSprite.scale.set(1);
+            }
+            else
+            {
+                // Scale up a little according to a sine curve
+                let scale = 1 + 0.15*Math.sin(
+                    Math.PI * this.pulseTimer / this.pulseTimeout
+                );
+                this.itemSprite.scale.set(scale);
+            }
+        }
     }
 }
 
@@ -175,6 +198,10 @@ export class HUD
             this.money.quantity = this.player.money;
             this.health.condition = this.player.health;
         }
+        this.food.update(dt);
+        this.water.update(dt);
+        this.money.update(dt);
+        this.health.update(dt);
     }
 }
 

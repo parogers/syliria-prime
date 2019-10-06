@@ -142,5 +142,15 @@ export class PlayScreen
         }
         if (this.window) this.window.update(dt);
         this.hud.update(dt);
+
+
+        this.currentTime += dt;
+        if (this.currentTime - this.lastTime > 2) {
+            this.lastTime = this.currentTime;
+            this.player.money++;
+        }
     }
+
+    private currentTime: number = 0;
+    private lastTime: number = 0;
 }
