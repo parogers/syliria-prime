@@ -139,6 +139,7 @@ export class PlayScreen
             this.player.update(dt);
         }
         if (this.window) this.window.update(dt);
+        this.hud.level = this.level;
         this.hud.update(dt);
 
 

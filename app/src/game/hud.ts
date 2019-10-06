@@ -158,8 +158,8 @@ class ProgressBar
     public container: any;
     public totalDistance: number = 100;
     public distance: number = 0;
-    private travelStartX: number = 6;
-    private travelLength: number = 90;
+    private travelStartX: number = 7;
+    private travelLength: number = 86;
 
     constructor()
     {
@@ -179,9 +179,13 @@ class ProgressBar
 
     update(dt)
     {
+        let pos = this.distance/this.totalDistance;
+        pos = Math.min(pos, 1);
+        pos = Math.max(pos, 0);
+
         this.markerSprite.x = (
             this.travelStartX +
-            this.travelLength*this.distance/this.totalDistance
+            this.travelLength*pos
         );
     }
 }
@@ -197,6 +201,7 @@ export class HUD
     private health: any;
     private player: any;
     private progress: any;
+    public level: any = null;
 
     constructor(player)
     {
@@ -218,7 +223,7 @@ export class HUD
         this.water.container.position.set(14, 1);
         this.money.container.position.set(27, 1);
         this.health.container.position.set(40, 1);
-        this.progress.container.position.set(0, VIEW_HEIGHT - 10);
+        this.progress.container.position.set(0, VIEW_HEIGHT - 9);
 
         this.container.addChild(this.food.container);
         this.container.addChild(this.water.container);
@@ -234,6 +239,10 @@ export class HUD
             this.water.quantity = this.player.water;
             this.money.quantity = this.player.money;
             this.health.condition = this.player.health;
+            if (this.level) {
+                this.progress.totalDistance = this.level.totalDistance;
+                this.progress.distance = this.level.distance;
+            }
         }
         this.food.update(dt);
         this.water.update(dt);
