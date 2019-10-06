@@ -21,7 +21,7 @@ import { Resource, getTexture } from './resource';
 
 declare var PIXI: any;
 
-const TEXT_SCALE = 0.5;
+const TEXT_SCALE = 0.6;
 const DEFAULT_COLOR = 0xffffff;
 
 export class FadeInText
@@ -67,13 +67,21 @@ export class FadeInText
  * provided. This returns a PIXI container holding the rendered text as
  * a collection of sprites. 
  */
-export function renderText(text, maxWidth)
+export function renderText(text, maxWidth, args?)
 {
-    let result = renderTextToBox(text, maxWidth, -1);
+    let result = renderTextToBox(text, maxWidth, -1, args);
     return result.container;
 }
 
-export function renderTextToBox(text, maxWidth, maxHeight)
+function getArg(args, name, defaultValue)
+{
+    if (args && args[name] !== undefined) {
+        return args[name];
+    }
+    return defaultValue;
+}
+
+export function renderTextToBox(text, maxWidth, maxHeight, args?)
 {
     let vspacing = 2, hspacing = 1;
     let container = new PIXI.Container();
@@ -82,10 +90,11 @@ export function renderTextToBox(text, maxWidth, maxHeight)
     let word = [];
     let wordWidth = 0;
     let wordHeight = 0;
+    let color = getArg(args, 'color', DEFAULT_COLOR);
 
     // Adjust the maximum text width based on how much we down scale it
-    maxWidth /= TEXT_SCALE;
-    maxHeight /= TEXT_SCALE;
+    if (maxWidth > 0) maxWidth /= TEXT_SCALE;
+    if (maxHeight > 0) maxHeight /= TEXT_SCALE;
 
     container.scale.set(TEXT_SCALE);
 
@@ -95,10 +104,15 @@ export function renderTextToBox(text, maxWidth, maxHeight)
         let char = text.charAt(n);
         let texture = getTexture(Resource.LETTERS, char);
 
+        if (texture === undefined) {
+            console.log('ERROR: cannot find character:', char);
+            continue;
+        }
+
         if (char === ' ')
         {
             // Emit the word
-            if (x + wordWidth > maxWidth) {
+            if (maxWidth > 0 && x + wordWidth > maxWidth) {
                 // Not enough room - skip to the next line if possible
                 x = 0;
                 y += vspacing + wordHeight;
@@ -112,7 +126,7 @@ export function renderTextToBox(text, maxWidth, maxHeight)
             }
             for (let other of word) {
                 let sprite = new PIXI.Sprite(other);
-                sprite.tint = DEFAULT_COLOR;
+                sprite.tint = color;
                 sprite.x = x;
                 sprite.y = y;
                 x += other.width + hspacing;
