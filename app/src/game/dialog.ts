@@ -143,11 +143,8 @@ export class DialogWindow
     private text: string;
     private textNextChar: number;
 
-    constructor(text, responses)
+    constructor()
     {
-        this.textNextChar = 0;
-        this.text = text;
-        this.state = this.STATE_RENDERING_TEXT;
         this.container = new PIXI.Container();
         this.windowSprite = new PIXI.Sprite(
             getTexture(Resource.GUI, 'dialog-window')
@@ -158,8 +155,6 @@ export class DialogWindow
         this.textSprite.x = this.textStartX;
         this.textSprite.y = this.textStartY;
         this.container.addChild(this.textSprite);
-
-        this.showNextPageOfText();
 
         this.buttonContainer = new PIXI.Container();
         this.buttonContainer.position.set(
@@ -176,12 +171,29 @@ export class DialogWindow
             }
         );
         this.buttonContainer.addChild(this.moreButton.container);
+    }
 
+    // Display the given text and responses in the dialog window
+    showContent(text, responses)
+    {
+        if (responses === undefined) responses = ['OK'];
+        this.buttonContainer.removeChildren();
+        this.buttonContainer.addChild(this.moreButton.container);
+        this.textNextChar = 0;
+        this.text = text;
+        this.responses = responses;
+        this.state = this.STATE_RENDERING_TEXT;
+        this.response = -1;
+        this.showNextPageOfText();
+    }
+
+    showResponseButtons()
+    {
         // Position the buttons at the bottom of the window
         let x = 0;
         let y = 0;
         this.buttons = [];
-        for (let response of responses)
+        for (let response of this.responses)
         {
             let button = new Button(response);
             button.container.x = x;
@@ -193,19 +205,6 @@ export class DialogWindow
             this.buttons.push(button);
             x += button.buttonSprite.width+2;
         }
-        this.hideResponseButtons();
-    }
-
-    showResponseButtons() {
-        for (let btn of this.buttons) {
-            btn.container.visible = true;
-        }
-    }
-
-    hideResponseButtons() {
-        for (let btn of this.buttons) {
-            btn.container.visible = false;
-        }
     }
 
     hideMoreButton() {
@@ -214,6 +213,9 @@ export class DialogWindow
 
     showNextPageOfText()
     {
+        if (this.state === this.STATE_RESPONSE_BUTTONS) {
+            return;
+        }
         let result = renderTextToBox(
             this.text.slice(this.textNextChar),
             this.textAreaWidth,
@@ -222,19 +224,23 @@ export class DialogWindow
         this.textSprite.removeChildren();
         this.textSprite.addChild(result.container);
         this.state = this.STATE_MORE_BUTTON;
-        this.textNextChar += result.nextChar;
 
         if (result.nextChar === -1) {
+            // No more text to render. Show the response buttons now.
             this.showResponseButtons();
             this.hideMoreButton();
             this.state = this.STATE_RESPONSE_BUTTONS;
+        } else {
+            this.textNextChar += result.nextChar;
         }
     }
 
     update(dt)
     {
-        for (let button of this.buttons) {
-            button.update(dt);
+        if (this.buttons) {
+            for (let button of this.buttons) {
+                button.update(dt);
+            }
         }
         this.moreButton.update(dt);
     }
