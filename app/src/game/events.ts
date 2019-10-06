@@ -19,6 +19,8 @@
 
 import { MessageBox } from './dialog';
 
+/* Displays a message to the player, and once dismissed triggers a
+ * callback function that implements the consequences. */
 export class DiscreteEvent
 {
     public done: boolean = false;

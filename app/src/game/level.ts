@@ -19,7 +19,7 @@
 
 import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { Scenery } from './scenery';
-import { randint } from './random';
+import { randint, choice } from './random';
 import { DiscreteEvent } from './events';
 
 declare var PIXI: any;
@@ -35,6 +35,7 @@ export class ForestLevel
     public player: any;
     private totalDistance: number = 1000;
     private distance: number = 0;
+    private nextEventDistance: number = 50;
 
     constructor()
     {
@@ -100,6 +101,48 @@ export class ForestLevel
         return this.distance >= this.totalDistance;
     }
 
+    spawnRandomEvent()
+    {
+        function foundCoin()
+        {
+            return new DiscreteEvent(
+                'LUCKY DAY! YOU FOUND A FEW COINS ON THE ROADSIDE',
+                () => {
+                    this.player.money += randint(1, 5);
+                }
+            );
+        }
+        function foundFood()
+        {
+            let msg = choice([
+                'YOU COLLECT SOME TASTY BERRIES FROM A BUSH NEARBY',
+                'YOU COLLECT SOME APPLES FROM A NEARBY APPLE TREE',
+                'YOU DIG UP SOME TASTY ROOT VEGETABLES',
+            ]);
+            return new DiscreteEvent(
+                msg,
+                () => {
+                    this.player.food += randint(1, 3);
+                }
+            );
+        }
+        function foundWater()
+        {
+            return new DiscreteEvent(
+                'YOU COLLECT SOME WATER FROM A NEARBY STREAM',
+                () => {
+                    this.player.water += randint(1, 3);
+                }
+            );
+        }
+        let func = choice([
+            foundCoin,
+            foundFood,
+            foundWater,
+        ]);
+        return func.bind(this)();
+    }
+
     update(dt)
     {
         let speed = this.player.movementSpeed;
@@ -110,13 +153,12 @@ export class ForestLevel
         let oldDistance = this.distance;
         this.distance += speed*dt;
 
-        if (oldDistance < 50 && this.distance > 50) {
-            return new DiscreteEvent(
-                'LUCKY DAY! YOU FOUND A COIN ON THE ROADSIDE',
-                () => {
-                    this.player.money++;
-                }
-            );
+        // Check if we need to spawn an event
+        if (oldDistance < this.nextEventDistance &&
+            this.distance > this.nextEventDistance)
+        {
+            this.nextEventDistance += randint(100, 150)
+            return this.spawnRandomEvent();
         }
     }
 }
