@@ -20,6 +20,7 @@
 import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { Scenery } from './scenery';
 import { randint } from './random';
+import { DiscreteEvent } from './events';
 
 declare var PIXI: any;
 
@@ -32,7 +33,7 @@ export class ForestLevel
     private roadPosX: number = 10;
     private roadPosY: number = 65;
     public player: any;
-    private totalDistance: number = 100;
+    private totalDistance: number = 1000;
     private distance: number = 0;
 
     constructor()
@@ -110,7 +111,12 @@ export class ForestLevel
         this.distance += speed*dt;
 
         if (oldDistance < 50 && this.distance > 50) {
-            console.log('event');
+            return new DiscreteEvent(
+                'LUCKY DAY! YOU FOUND A COIN ON THE ROADSIDE',
+                () => {
+                    this.player.money++;
+                }
+            );
         }
     }
 }
