@@ -33,14 +33,19 @@ class Button
     private textPosY: number = 2.75;
     private state: number;
     private timer: number;
+    private releaseDelay: number = 0.2;
+    private triggerDelay: number = 0.1;
+    // The callback function triggered when the button is considered
+    // to have been pressed. (short delay after it pops up)
+    private callbackFunc: any;
 
-    constructor(text, index)
+    constructor(text)
     {
         this.state = this.STATE_IDLE;
         this.text = text;
-        this.index = index;
         this.buttonUpTexture = getTexture(Resource.GUI, 'button-up');
         this.buttonDownTexture = getTexture(Resource.GUI, 'button-down');
+        this.callbackFunc = null;
 
         this.buttonSprite = new PIXI.Sprite(this.buttonUpTexture);
 
@@ -57,6 +62,13 @@ class Button
         this.buttonSprite.on('pointerup', () => this.handleReleased());
 
         this.showButtonUp();
+    }
+
+    on(event, func)
+    {
+        if (event === 'pressed') {
+            this.callbackFunc = func;
+        }
     }
 
     showButtonUp() {
@@ -85,7 +97,7 @@ class Button
         if (this.state === this.STATE_PRESSED) {
             // Have the button release after a short interval
             this.state = this.STATE_RELEASE_TIMEOUT;
-            this.timer = 0.2;
+            this.timer = this.releaseDelay;
         }
     }
 
@@ -96,6 +108,7 @@ class Button
             // Wait until releasing the button
             this.timer -= dt;
             if (this.timer <= 0) {
+                this.timer = this.triggerDelay;
                 this.state = this.STATE_TRIGGER_TIMEOUT;
                 this.showButtonUp();
             }
@@ -106,7 +119,7 @@ class Button
             this.timer -= dt;
             if (this.timer <= 0) {
                 this.state = this.STATE_IDLE;
-                console.log('trigger');
+                if (this.callbackFunc) this.callbackFunc(this);
             }
         }
     }
@@ -120,6 +133,8 @@ export class DialogWindow
     private textAreaWidth: number = 70;
     private textAreaHeight: number = 40;
     private buttons: any;
+    // This is set to the index of the first button that is clicked on
+    public response: any = -1;
 
     constructor(text, responses)
     {
@@ -141,9 +156,12 @@ export class DialogWindow
         this.buttons = [];
         for (let response of responses)
         {
-            let button = new Button(response, count);
+            let button = new Button(response);
             button.container.x = x;
             button.container.y = y;
+            button.on('pressed', btn => {
+                this.response = this.buttons.indexOf(btn);
+            });
             this.container.addChild(button.container);
             this.buttons.push(button);
             x += button.buttonSprite.width+2;

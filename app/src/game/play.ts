@@ -56,7 +56,7 @@ export class PlayScreen
         this.stage.addChild(text.container);
         this.text = text;
 
-        this.window = new DialogWindow('THIS IS SOMETHING', ['YES', 'NO']);
+        this.window = new DialogWindow('THIS IS SOMETHING. THIS IS ANOTHER LONG LINE OF TEXT CAN YOU GUESS IF IT WILL WRAP OR NOT?', ['YES', 'NO']);
         this.stage.addChild(this.window.container);
 
         /*

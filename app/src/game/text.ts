@@ -76,6 +76,9 @@ export function renderText(text, maxWidth)
     let wordWidth = 0;
     let wordHeight = 0;
 
+    // Adjust the maximum text width based on how much we down scale it
+    maxWidth /= TEXT_SCALE;
+
     container.scale.set(TEXT_SCALE);
 
     text += ' ';

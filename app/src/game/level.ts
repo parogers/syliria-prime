@@ -105,7 +105,13 @@ export class ForestLevel
         this.scenery.scroll(-speed*dt);
         this.trees.scroll(-speed*dt);
         this.bushes.scroll(-speed*dt);
+
+        let oldDistance = this.distance;
         this.distance += speed*dt;
+
+        if (oldDistance < 50 && this.distance > 50) {
+            console.log('event');
+        }
     }
 }
 
