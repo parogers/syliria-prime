@@ -181,6 +181,10 @@ export class DialogWindow
         }
     }
 
+    close() {
+        this.container.parent.removeChild(this.container);
+    }
+
     // Display the given text and responses in the dialog window
     showContent(text, responses)
     {
