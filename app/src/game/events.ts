@@ -17,7 +17,7 @@
  * See LICENSE.txt for the full text of the license.
  */
 
-import { MessageBox } from './dialog';
+import { DialogWindow, MessageBox } from './dialog';
 
 /* Displays a message to the player, and once dismissed triggers a
  * callback function that implements the consequences. */
@@ -45,3 +45,75 @@ export class DiscreteEvent
         this.messageBox.update(dt);
     }
 }
+
+export class StoryNode
+{
+    private text: any;
+    private responseData: any;
+
+    constructor(text, responseData)
+    {
+        this.text = text;
+        this.responseData = responseData;
+    }
+
+    get responses() {
+        return this.responseData.map(r => r[0]);
+    }
+
+    // Returns the next node (name)
+    getNextNode(index) {
+        return this.responseData[index][1];
+    }
+}
+
+export class StoryEvent
+{
+    private storyNodes: any;
+    private currentNode: StoryNode;
+    public done: boolean = false;
+
+    constructor(storyNodes)
+    {
+        this.storyNodes = storyNodes;
+        this.dialogWindow = new DialogWindow();
+        this.dialogWindow.on(
+            'selected', index => {
+                // Advance to the next node
+                let next = this.currentNode.getNextNode(index);
+                if (next !== null) {
+                    this.showNode(this.storyNodes[next]);
+                } else {
+                    this.dialogWindow.close();
+                    this.done = true;
+                }
+            }
+        );
+    }
+
+    get startNode() {
+        return this.storyNodes['start'];
+    }
+
+    start(playScreen)
+    {
+        playScreen.stage.addChild(
+            this.dialogWindow.container
+        );
+        this.showNode(this.startNode);
+    }
+
+    showNode(node)
+    {
+        this.currentNode = node;
+        this.dialogWindow.showContent(
+            node.text,
+            node.responses
+        );
+    }
+
+    update(dt) {
+        this.dialogWindow.update(dt);
+    }
+}
+
