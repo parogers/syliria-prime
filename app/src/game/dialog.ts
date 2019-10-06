@@ -17,7 +17,7 @@
  * See LICENSE.txt for the full text of the license.
  */
 
-import { Resource, getTexture } from './resource';
+import { Resource, getTexture, VIEW_WIDTH, VIEW_HEIGHT } from './resource';
 import { renderText, renderTextToBox } from './text';
 
 declare const PIXI: any;
@@ -125,6 +125,8 @@ class Button
     }
 }
 
+/* A dialog window fills the entire screen and presents the player with a block of 
+ * text and several responses to choose from. */
 export class DialogWindow
 {
     private STATE_RENDERING_TEXT = 0;
@@ -256,5 +258,65 @@ export class DialogWindow
             }
         }
         this.moreButton.update(dt);
+    }
+}
+
+/* A message box displays a short message to the player. It displays a single "OK"
+ * button at the bottom that dismisses the window. */
+export class MessageBox
+{
+    public container: any;
+    private textAreaWidth = 55;
+    private textPosX = 5;
+    private textPosY = 5;
+    private callbackFunc: any;
+    public closed: boolean = false;
+
+    constructor(text, buttonText?)
+    {
+        if (buttonText === undefined) buttonText = 'OK';
+        this.container = new PIXI.Container();
+        this.windowSprite = new PIXI.Sprite(
+            getTexture(Resource.GUI, 'message-window')
+        );
+        this.container.addChild(this.windowSprite);
+
+        this.textSprite = renderText(text, this.textAreaWidth);
+        this.textSprite.x = this.textPosX;
+        this.textSprite.y = this.textPosY;
+        this.container.addChild(this.textSprite);
+
+        this.okayButton = new Button(buttonText);
+        this.okayButton.container.x = 21.5;
+        this.okayButton.container.y = 21;
+        this.okayButton.on(
+            'pressed',
+            () => {
+                this.close();
+                if (this.callbackFunc) this.callbackFunc(this);
+            }
+        );
+        this.container.addChild(this.okayButton.container);
+
+        // Have the window centered by default
+        this.container.x = VIEW_WIDTH/2 - this.windowSprite.texture.width/2;
+        this.container.y = VIEW_HEIGHT/2 - this.windowSprite.texture.height/2;
+    }
+
+    on(event, func) {
+        if (event === 'closed') {
+            this.callbackFunc = func;
+        }
+    }
+
+    close() {
+        if (!this.closed) {
+            this.closed = true;
+            this.container.parent.removeChild(this.container);
+        }
+    }
+
+    update(dt) {
+        this.okayButton.update(dt);
     }
 }
