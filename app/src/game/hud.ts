@@ -19,8 +19,67 @@
 
 import { Resource, getTexture } from './resource';
 import { renderText } from './text';
+import { Health } from './player';
 
 declare const PIXI: any;
+
+/* Maps a health state onto the corresponding heart texture
+ * (eg good health returns a red heart) 
+ */
+function getTextureFromHealth(health)
+{
+    let name = '';
+
+    if (health === Health.GOOD) {
+        name = 'red-heart';
+
+    } else if (health === Health.FAIR) {
+        name = 'orange-heart';
+
+    } else if (health === Health.POOR) {
+        name = 'yellow-heart';
+
+    } else if (health === Health.BAD) {
+        name = 'gray-heart';
+
+    }
+    return getTexture(Resource.ITEMS, name);
+}
+
+class HealthSlot
+{
+    public container: any;
+    private _condition: number;
+
+    constructor()
+    {
+        this.container = new PIXI.Container();
+        this.holderSprite = new PIXI.Sprite(
+            getTexture(Resource.GUI, 'holder2')
+        );
+        this.container.addChild(this.holderSprite);
+
+        this.heartSprite = new PIXI.Sprite();
+        this.heartSprite.anchor.set(0.5);
+        this.heartSprite.position.set(
+            this.holderSprite.texture.width/2,
+            this.holderSprite.texture.height/2
+        );
+        this.container.addChild(this.heartSprite);
+    }
+
+    set condition(value)
+    {
+        if (this._condition !== value)
+        {
+            this._condition = value;
+            this.heartSprite.texture = getTextureFromHealth(value);
+        }
+    }
+
+    update(dt) {
+    }
+}
 
 /* Displays a single item along with a quantity value */
 class ItemSlot
@@ -95,14 +154,17 @@ export class HUD
         this.money = new ItemSlot(
             getTexture(Resource.ITEMS, 'coin')
         );
+        this.health = new HealthSlot();
 
         this.food.container.x = 0;
         this.water.container.x = 13;
         this.money.container.x = 26;
+        this.health.container.x = 39;
 
         this.container.addChild(this.food.container);
         this.container.addChild(this.water.container);
         this.container.addChild(this.money.container);
+        this.container.addChild(this.health.container);
     }
 
     update(dt)
@@ -111,6 +173,7 @@ export class HUD
             this.food.quantity = this.player.food;
             this.water.quantity = this.player.water;
             this.money.quantity = this.player.money;
+            this.health.condition = this.player.health;
         }
     }
 }
