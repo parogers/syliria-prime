@@ -18,7 +18,7 @@
  */
 
 import { Resource, getTexture } from './resource';
-import { renderText } from './text';
+import { renderText, renderTextToBox } from './text';
 
 declare const PIXI: any;
 
@@ -127,32 +127,59 @@ class Button
 
 export class DialogWindow
 {
+    private STATE_RENDERING_TEXT = 0;
+    private STATE_MORE_BUTTON = 1;
+    private STATE_RESPONSE_BUTTONS = 2;
+
     public container: any;
     private textStartX: number = 12;
     private textStartY: number = 12;
     private textAreaWidth: number = 70;
     private textAreaHeight: number = 40;
     private buttons: any;
+    private moreButton: any;
     // This is set to the index of the first button that is clicked on
     public response: any = -1;
+    private text: string;
+    private textNextChar: number;
 
     constructor(text, responses)
     {
+        this.textNextChar = 0;
+        this.text = text;
+        this.state = this.STATE_RENDERING_TEXT;
         this.container = new PIXI.Container();
         this.windowSprite = new PIXI.Sprite(
             getTexture(Resource.GUI, 'dialog-window')
         );
         this.container.addChild(this.windowSprite);
 
-        this.textSprite = renderText(text, this.textAreaWidth);
+        this.textSprite = new PIXI.Container();
         this.textSprite.x = this.textStartX;
         this.textSprite.y = this.textStartY;
         this.container.addChild(this.textSprite);
 
+        this.showNextPageOfText();
+
+        this.buttonContainer = new PIXI.Container();
+        this.buttonContainer.position.set(
+            this.textStartX,
+            this.textStartY + this.textAreaHeight + 5
+        );
+        this.container.addChild(this.buttonContainer);
+
+        this.moreButton = new Button('CONTINUE');
+        this.moreButton.on(
+            'pressed',
+            () => {
+                this.showNextPageOfText();
+            }
+        );
+        this.buttonContainer.addChild(this.moreButton.container);
+
         // Position the buttons at the bottom of the window
-        let count = 0;
-        let x = this.textStartX;
-        let y = this.textStartY + this.textAreaHeight + 5;
+        let x = 0;
+        let y = 0;
         this.buttons = [];
         for (let response of responses)
         {
@@ -162,10 +189,45 @@ export class DialogWindow
             button.on('pressed', btn => {
                 this.response = this.buttons.indexOf(btn);
             });
-            this.container.addChild(button.container);
+            this.buttonContainer.addChild(button.container);
             this.buttons.push(button);
             x += button.buttonSprite.width+2;
-            count++;
+        }
+        this.hideResponseButtons();
+    }
+
+    showResponseButtons() {
+        for (let btn of this.buttons) {
+            btn.container.visible = true;
+        }
+    }
+
+    hideResponseButtons() {
+        for (let btn of this.buttons) {
+            btn.container.visible = false;
+        }
+    }
+
+    hideMoreButton() {
+        this.moreButton.container.visible = false;
+    }
+
+    showNextPageOfText()
+    {
+        let result = renderTextToBox(
+            this.text.slice(this.textNextChar),
+            this.textAreaWidth,
+            this.textAreaHeight
+        );
+        this.textSprite.removeChildren();
+        this.textSprite.addChild(result.container);
+        this.state = this.STATE_MORE_BUTTON;
+        this.textNextChar += result.nextChar;
+
+        if (result.nextChar === -1) {
+            this.showResponseButtons();
+            this.hideMoreButton();
+            this.state = this.STATE_RESPONSE_BUTTONS;
         }
     }
 
@@ -174,5 +236,6 @@ export class DialogWindow
         for (let button of this.buttons) {
             button.update(dt);
         }
+        this.moreButton.update(dt);
     }
 }
