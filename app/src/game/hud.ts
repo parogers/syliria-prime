@@ -50,6 +50,8 @@ class HealthSlot
 {
     public container: any;
     private _condition: number;
+    private holderSprite: any;
+    private heartSprite: any;
 
     constructor()
     {
@@ -88,6 +90,9 @@ class ItemSlot
     private _quantity: number = null;
     private pulseTimer: number;
     private pulseTimeout: number;
+    private itemSprite: any;
+    private textContainer: any;
+    private holderSprite: any;
 
     constructor(itemTexture)
     {
@@ -163,6 +168,8 @@ class ProgressBar
     public distance: number = 0;
     private travelStartX: number = 7;
     private travelLength: number = 86;
+    private markerSprite: any;
+    private backgroundSprite: any;
 
     constructor()
     {

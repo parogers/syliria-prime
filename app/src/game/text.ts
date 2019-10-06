@@ -52,7 +52,7 @@ export class FadeInText
             this.container.children[after].alpha = 0.5;
         }
         
-        for (let n = this.current|0; n <= next|0; n++) {
+        for (let n = (this.current|0); n <= (next|0); n++) {
             // Have the letters appear over time
             this.container.children[n].alpha = 1;
         }

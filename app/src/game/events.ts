@@ -19,17 +19,11 @@
 
 import { MessageBox } from './dialog';
 
-interface Event
-{
-    public done: boolean;
-    public start();
-    public update(dt);
-}
-
-export class DiscreteEvent implements Event
+export class DiscreteEvent
 {
     public done: boolean = false;
     private messageBox: any;
+    private callbackFunc: any;
 
     constructor(msg, callbackFunc)
     {

@@ -38,9 +38,12 @@ export class PlayScreen
     private STATE_EVENT = 4;
 
     private state: number;
-    private _level: Level;
+    private _level: any;
     private hud: any;
     private currentEvent: any;
+    public player: any;
+    public window: any;
+    public stage: any;
 
     constructor() {
         this.state = this.STATE_INFO_DUMP;
@@ -52,8 +55,7 @@ export class PlayScreen
         this.player = new Player();
         this.level = new ForestLevel();
 
-        this.hud = new HUD();
-        this.hud.player = this.player;
+        this.hud = new HUD(this.player);
         this.stage.addChild(this.hud.container);
 
         /*// Example text
