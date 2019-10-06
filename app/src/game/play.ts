@@ -1,6 +1,6 @@
 
 import { Resource, getTexture } from './resource';
-import { renderText } from './text';
+import { FadeInText } from './text';
 
 declare var PIXI: any;
 
@@ -146,16 +146,19 @@ export class PlayScreen
 
         // Example text
         let textScale = 0.5;
-        let sprite = renderText('HELLO WORLD THIS IS A LARGER AMOUNT OF TEXT THAT SHOULD SPLIT MULTIPLE LINES. ANOTHER LINE HERE.', Resource.LETTERS, 200);
-        sprite.scale.set(textScale);
-        sprite.x = 5;
-        sprite.y = 5;
-        this.stage.addChild(sprite);
+        let text = new FadeInText('HELLO WORLD THIS IS A LARGER AMOUNT OF TEXT THAT SHOULD SPLIT MULTIPLE LINES. ANOTHER LINE HERE.', 200);
+        text.container.scale.set(textScale);
+        text.container.x = 5;
+        text.container.y = 5;
+        this.stage.addChild(text.container);
+        this.text = text;
     }
 
     update(dt) {
         this.scenery.scroll(-20*dt);
         this.trees.scroll(-20*dt);
         this.bushes.scroll(-20*dt);
+
+        this.text.update(dt);
     }
 }

@@ -21,12 +21,49 @@ import { Resource, getTexture } from './resource';
 
 declare var PIXI: any;
 
+export class FadeInText
+{
+    public container: any;
+    private current: number;
+
+    constructor(text, maxWidth)
+    {
+        this.container = renderText(text, maxWidth);
+        // Make all lettering initially invisible
+        for (let sprite of this.container.children) {
+            sprite.alpha = 0;
+        }
+        this.current = 0;
+    }
+
+    update(dt)
+    {
+        if (this.current >= this.container.children.length) return;
+
+        let rate = 20;
+        let next = this.current + rate*dt;
+        next = Math.min(next, this.container.children.length-1);
+
+        let after = (next|0)+1;
+        if (after < this.container.children.length) {
+            this.container.children[after].alpha = 0.5;
+        }
+        
+        for (let n = this.current|0; n <= next|0; n++) {
+            // Have the letters appear over time
+            this.container.children[n].alpha = 1;
+        }
+
+        this.current = next;
+    }
+}
+
 /* 
  * Renders a block of text using the given font, under the maximum width 
  * provided. This returns a PIXI container holding the rendered text as
  * a collection of sprites. 
  */
-export function renderText(text, font, maxWidth)
+export function renderText(text, maxWidth)
 {
     let vspacing = 2, hspacing = 1;
     let container = new PIXI.Container();
@@ -40,7 +77,7 @@ export function renderText(text, font, maxWidth)
     for (let n = 0; n < text.length; n++)
     {
         let char = text.charAt(n);
-        let texture = getTexture(font, char);
+        let texture = getTexture(Resource.LETTERS, char);
 
         if (char === ' ')
         {
