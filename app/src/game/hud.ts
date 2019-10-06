@@ -153,6 +153,9 @@ class ItemSlot
     }
 }
 
+/* This widget shows the players progress through the current level. Is has a 
+ * small "gem" on it that acts as the marker. */
+// TODO - expand this to allow "points of interest" to be added
 class ProgressBar
 {
     public container: any;
@@ -179,6 +182,8 @@ class ProgressBar
 
     update(dt)
     {
+        // Move the map marker into position
+        // TODO - implement this in a setter for distance?
         let pos = this.distance/this.totalDistance;
         pos = Math.min(pos, 1);
         pos = Math.max(pos, 0);
