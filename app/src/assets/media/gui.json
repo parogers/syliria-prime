@@ -40,13 +40,29 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":11},
 	"sourceSize": {"w":12,"h":11}
 },
+"mapmarker.png":
+{
+	"frame": {"x":27,"y":87,"w":4,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":4,"h":6},
+	"sourceSize": {"w":4,"h":6}
+},
 "message-window.png":
 {
-	"frame": {"x":27,"y":87,"w":66,"h":32},
+	"frame": {"x":32,"y":87,"w":66,"h":32},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":32},
 	"sourceSize": {"w":66,"h":32}
+},
+"progress.png":
+{
+	"frame": {"x":1,"y":120,"w":100,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":10},
+	"sourceSize": {"w":100,"h":10}
 }},
 "animations": {
 },
@@ -55,8 +71,8 @@
 	"version": "1.0",
 	"image": "gui.png",
 	"format": "RGBA8888",
-	"size": {"w":102,"h":120},
+	"size": {"w":102,"h":131},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ba1d55bd2f0d4c9f126b662c57d7b20e:4e83f64808c4630b2ec92c0a55c734f3:788b34ed4e778d63c84b2c3df4d44949$"
+	"smartupdate": "$TexturePacker:SmartUpdate:db5554c7cb03d1e2963931d4dcc8b1a1:321bcace0bcf6d9690f9b8238525c834:788b34ed4e778d63c84b2c3df4d44949$"
 }
 }

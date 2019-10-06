@@ -234,6 +234,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">mapmarker.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9Paddings</key>
+                <rect>2,2,3,3</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">message-window.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -247,6 +260,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">progress.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>25,3,50,5</rect>
+                <key>scale9Paddings</key>
+                <rect>25,3,50,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileList</key>
         <array>
@@ -256,6 +282,8 @@
             <filename>button-up.png</filename>
             <filename>message-window.png</filename>
             <filename>holder2.png</filename>
+            <filename>progress.png</filename>
+            <filename>mapmarker.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
