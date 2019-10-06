@@ -1,0 +1,44 @@
+{"frames": {
+
+"button-down.png":
+{
+	"frame": {"x":12,"y":1,"w":26,"h":9},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":9},
+	"sourceSize": {"w":26,"h":9}
+},
+"button-up.png":
+{
+	"frame": {"x":39,"y":1,"w":26,"h":9},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":9},
+	"sourceSize": {"w":26,"h":9}
+},
+"dialog-window.png":
+{
+	"frame": {"x":1,"y":12,"w":100,"h":75},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":75},
+	"sourceSize": {"w":100,"h":75}
+},
+"holder.png":
+{
+	"frame": {"x":1,"y":1,"w":10,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":10},
+	"sourceSize": {"w":10,"h":10}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "gui.png",
+	"format": "RGBA8888",
+	"size": {"w":102,"h":88},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1eaa961cdeac3a4bfa6449ab698fdd4d:95a55edb834d10c58798d4e7f5fade06:788b34ed4e778d63c84b2c3df4d44949$"
+}
+}
