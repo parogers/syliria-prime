@@ -142,6 +142,7 @@ export class DialogWindow
     public response: any = -1;
     private text: string;
     private textNextChar: number;
+    private callbackFunc: any;
 
     constructor()
     {
@@ -173,6 +174,13 @@ export class DialogWindow
         this.buttonContainer.addChild(this.moreButton.container);
     }
 
+    on(event, func)
+    {
+        if (event === 'selected') {
+            this.callbackFunc = func;
+        }
+    }
+
     // Display the given text and responses in the dialog window
     showContent(text, responses)
     {
@@ -200,6 +208,7 @@ export class DialogWindow
             button.container.y = y;
             button.on('pressed', btn => {
                 this.response = this.buttons.indexOf(btn);
+                if (this.callbackFunc) this.callbackFunc(this.response);
             });
             this.buttonContainer.addChild(button.container);
             this.buttons.push(button);
