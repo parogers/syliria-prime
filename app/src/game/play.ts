@@ -21,7 +21,7 @@ import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { FadeInText } from './text';
 import { Player } from './player';
 import { randint, choice } from './random';
-import { Scenery } from './scenery';
+import { ForestLevel, SwampLevel, DesertLevel } from './level';
 
 declare var PIXI: any;
 
@@ -33,82 +33,22 @@ const STATE_PLAYER_EXIT = 2;
  * background and the player advancing to the right. */
 export class PlayScreen
 {
-    public stage: any;
-    public scenery: any;
-    private trees: any;
-    private bushes: any;
-    private player: any;
-    private roadPosX: number = 10;
-    private roadPosY: number = 65;
     private state: number;
+    private _level: Level;
 
     constructor() {
+        this.state = STATE_PLAYER_ENTER;
+        this.stage = new PIXI.Container();
     }
 
     start()
     {
-        this.state = STATE_PLAYER_ENTER;
-        this.stage = new PIXI.Container();
-
-        this.scenery = new Scenery(
-            [
-                getTexture(Resource.FOREST),
-            ],
-            {
-                count: 3,
-            }
-        );
-        this.scenery.scroll(-1);
-
-        this.trees = new Scenery(
-            [
-                getTexture(Resource.VEGETATION, 'tree1'),
-                getTexture(Resource.VEGETATION, 'tree2'),
-                getTexture(Resource.VEGETATION, 'tree3'),
-                getTexture(Resource.VEGETATION, 'tree4'),
-            ],
-            {
-                initialX: 1.5*VIEW_WIDTH,
-                count: 10,
-                anchor: [0.5, 1],
-                offsetFunc: function() {
-                    return {
-                        x: randint(-5, 5),
-                        y: randint(0, -1),
-                    }
-                },
-            }
-        );
-
-        this.bushes = new Scenery(
-            [
-                getTexture(Resource.VEGETATION, 'bush1'),
-                getTexture(Resource.VEGETATION, 'bush2'),
-                getTexture(Resource.VEGETATION, 'bush3'),
-            ],
-            {
-                initialX: 1.2*VIEW_WIDTH,
-                count: 20,
-                anchor: [0.5, 1],
-                offsetFunc: function() {
-                    return {
-                        x: randint(-5, 5),
-                        y: randint(-2, 2),
-                    }
-                },
-            }
-        );
-
-        this.stage.addChild(this.scenery.container);
-        this.stage.addChild(this.trees.container);
-        this.stage.addChild(this.bushes.container);
-
-        this.trees.container.y = 46;
-        this.bushes.container.y = 48;
+        this.player = new Player();
+        this.level = new ForestLevel();
 
         // Example text
         let textScale = 0.5;
-        let text = new FadeInText('HELLO WORLD THIS IS A LARGER AMOUNT OF TEXT THAT SHOULD SPLIT MULTIPLE LINES. ANOTHER LINE HERE.', 200);
+        let text = new FadeInText('WELCOME TO THE SYLIRIA PRIME GAME JAM DEMO! THIS IS CURRENTLY A WORK IN PROGRESS.', 175);
         text.container.scale.set(textScale);
         text.container.x = 5;
         text.container.y = 5;
@@ -129,10 +69,21 @@ export class PlayScreen
             console.log('click');
         });*/
 
-        this.player = new Player();
+    }
+
+    set level(level)
+    {
+        this._level = level;
+        this.stage.removeChildren();
+        this.stage.addChild(this._level.stage);
         // The player starts off screen
         this.player.sprite.x = -10;
-        this.stage.addChild(this.player.sprite);
+        this._level.player = this.player;
+        this._level.stage.addChild(this.player.sprite);
+    }
+
+    get level() {
+        return this._level;
     }
 
     update(dt)
@@ -140,35 +91,35 @@ export class PlayScreen
         if (this.state === STATE_PLAYER_ENTER) {
             // Player is entering the level
             this.player.sprite.x += this.player.movementSpeed*dt;
-            this.player.sprite.y = this.roadPosY;
+            this.player.sprite.y = this.level.roadPosY;
 
-            if (this.player.sprite.x > this.roadPosX) {
-                this.player.sprite.x = this.roadPosX;
+            if (this.player.sprite.x > this.level.roadPosX) {
+                this.player.sprite.x = this.level.roadPosX;
                 this.state = STATE_GAMEPLAY;
             }
             this.player.update(dt);
         }
         else if (this.state === STATE_GAMEPLAY) {
             // Normal gameplay
-            this.player.sprite.x = this.roadPosX;
-            this.player.sprite.y = this.roadPosY;
+            this.player.sprite.x = this.level.roadPosX;
+            this.player.sprite.y = this.level.roadPosY;
             this.player.update(dt);
 
-            let speed = this.player.movementSpeed;
-            this.scenery.scroll(-speed*dt);
-            this.trees.scroll(-speed*dt);
-            this.bushes.scroll(-speed*dt);
+            this.level.update(dt);
+            if (this.level.done) {
+                this.state = STATE_PLAYER_EXIT;
+            }
         }
         else if (this.state === STATE_PLAYER_EXIT) {
             // Player is leaving the level
             this.player.sprite.x += this.player.movementSpeed*dt;
-            if (this.player.sprite.x > VIEW_WIDTH)
+            if (this.player.sprite.x > VIEW_WIDTH + 10)
             {
                 // Next level
                 // ...
             }
+            this.player.update(dt);
         }
-        
         this.text.update(dt);
     }
 }

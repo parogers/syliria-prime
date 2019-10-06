@@ -10,6 +10,8 @@ export var Resource = {
     CHARS: 'assets/characters.json',
     VEGETATION: 'assets/vegetation.json',
     FOREST: 'assets/forest.png',
+    SWAMP: 'assets/media/swamp.png',
+    DESERT: 'assets/media/desert.png',
     LETTERS: 'assets/media/letters.json',
 };
 
