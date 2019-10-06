@@ -21,6 +21,9 @@ import { Resource, getTexture } from './resource';
 
 declare var PIXI: any;
 
+const TEXT_SCALE = 0.5;
+const DEFAULT_COLOR = 0xffffff;
+
 export class FadeInText
 {
     public container: any;
@@ -73,6 +76,8 @@ export function renderText(text, maxWidth)
     let wordWidth = 0;
     let wordHeight = 0;
 
+    container.scale.set(TEXT_SCALE);
+
     text += ' ';
     for (let n = 0; n < text.length; n++)
     {
@@ -88,7 +93,7 @@ export function renderText(text, maxWidth)
             }
             for (let other of word) {
                 let sprite = new PIXI.Sprite(other);
-                //sprite.tint = 0xFF0000;
+                sprite.tint = DEFAULT_COLOR;
                 sprite.x = x;
                 sprite.y = y;
                 x += other.width + hspacing;
