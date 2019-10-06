@@ -44,6 +44,10 @@ export class Player
         this.sprite.addChild(this.charSprite)
     }
 
+    get movementSpeed() {
+        return 20;
+    }
+
     update(dt) {
         this.charSprite.texture = this.anim.update(dt);
     }

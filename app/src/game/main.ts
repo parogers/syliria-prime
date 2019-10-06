@@ -1,12 +1,8 @@
 
 import { GameState } from './state';
+import { VIEW_WIDTH, VIEW_HEIGHT } from './resource';
 
 declare var PIXI: any;
-
-// Size of the virtual display (this gets scaled up to
-// fit the available/actual space on screen)
-const VIEW_WIDTH = 100;
-const VIEW_HEIGHT = 75;
 
 export class Game
 {

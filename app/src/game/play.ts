@@ -17,13 +17,17 @@
  * See LICENSE.txt for the full text of the license.
  */
 
-import { Resource, getTexture } from './resource';
+import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { FadeInText } from './text';
 import { Player } from './player';
 import { randint, choice } from './random';
 import { Scenery } from './scenery';
 
 declare var PIXI: any;
+
+const STATE_PLAYER_ENTER = 0;
+const STATE_GAMEPLAY = 1;
+const STATE_PLAYER_EXIT = 2;
 
 /* The play screen is where most of the gameplay happens. It features a scrolling 
  * background and the player advancing to the right. */
@@ -36,12 +40,14 @@ export class PlayScreen
     private player: any;
     private roadPosX: number = 10;
     private roadPosY: number = 65;
+    private state: number;
 
     constructor() {
     }
 
     start()
     {
+        this.state = STATE_PLAYER_ENTER;
         this.stage = new PIXI.Container();
 
         this.scenery = new Scenery(
@@ -49,10 +55,10 @@ export class PlayScreen
                 getTexture(Resource.FOREST),
             ],
             {
-                count: 2,
-                tightFit: true,
+                count: 3,
             }
         );
+        this.scenery.scroll(-1);
 
         this.trees = new Scenery(
             [
@@ -62,6 +68,7 @@ export class PlayScreen
                 getTexture(Resource.VEGETATION, 'tree4'),
             ],
             {
+                initialX: 1.5*VIEW_WIDTH,
                 count: 10,
                 anchor: [0.5, 1],
                 offsetFunc: function() {
@@ -80,6 +87,7 @@ export class PlayScreen
                 getTexture(Resource.VEGETATION, 'bush3'),
             ],
             {
+                initialX: 1.2*VIEW_WIDTH,
                 count: 20,
                 anchor: [0.5, 1],
                 offsetFunc: function() {
@@ -122,18 +130,45 @@ export class PlayScreen
         });*/
 
         this.player = new Player();
+        // The player starts off screen
+        this.player.sprite.x = -10;
         this.stage.addChild(this.player.sprite);
     }
 
-    update(dt) {
-        this.player.sprite.x = this.roadPosX;
-        this.player.sprite.y = this.roadPosY;
-        this.player.update(dt);
-        
-        this.scenery.scroll(-20*dt);
-        this.trees.scroll(-20*dt);
-        this.bushes.scroll(-20*dt);
+    update(dt)
+    {
+        if (this.state === STATE_PLAYER_ENTER) {
+            // Player is entering the level
+            this.player.sprite.x += this.player.movementSpeed*dt;
+            this.player.sprite.y = this.roadPosY;
 
+            if (this.player.sprite.x > this.roadPosX) {
+                this.player.sprite.x = this.roadPosX;
+                this.state = STATE_GAMEPLAY;
+            }
+            this.player.update(dt);
+        }
+        else if (this.state === STATE_GAMEPLAY) {
+            // Normal gameplay
+            this.player.sprite.x = this.roadPosX;
+            this.player.sprite.y = this.roadPosY;
+            this.player.update(dt);
+
+            let speed = this.player.movementSpeed;
+            this.scenery.scroll(-speed*dt);
+            this.trees.scroll(-speed*dt);
+            this.bushes.scroll(-speed*dt);
+        }
+        else if (this.state === STATE_PLAYER_EXIT) {
+            // Player is leaving the level
+            this.player.sprite.x += this.player.movementSpeed*dt;
+            if (this.player.sprite.x > VIEW_WIDTH)
+            {
+                // Next level
+                // ...
+            }
+        }
+        
         this.text.update(dt);
     }
 }
