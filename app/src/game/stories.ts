@@ -18,7 +18,7 @@
  */
 
 import { randint, choice } from './random';
-import { StoryEvent, StoryNode } from './events';
+import { DiscreteEvent, StoryEvent, StoryNode } from './events';
 
 export var Story = {};
 
@@ -114,4 +114,39 @@ Story.treasureCave = function(level)
     });
 }
 
+
+Story.foundCoin = function(level)
+{
+    return new DiscreteEvent(
+        'LUCKY DAY! YOU FOUND A FEW COINS ON THE ROADSIDE',
+        () => {
+            level.player.money += randint(1, 5);
+        }
+    );
+}
+
+Story.foundFood = function(level)
+{
+    let msg = choice([
+        'YOU COLLECT SOME TASTY BERRIES FROM A BUSH NEARBY',
+        'YOU COLLECT SOME APPLES FROM A NEARBY APPLE TREE',
+        'YOU DIG UP SOME TASTY ROOT VEGETABLES',
+    ]);
+    return new DiscreteEvent(
+        msg,
+        () => {
+            level.player.food += randint(1, 3);
+        }
+    );
+}
+
+Story.foundWater = function(level)
+{
+    return new DiscreteEvent(
+        'YOU COLLECT SOME WATER FROM A NEARBY STREAM',
+        () => {
+            level.player.water += randint(1, 3);
+        }
+    );
+}
 

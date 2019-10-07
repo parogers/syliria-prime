@@ -20,10 +20,35 @@
 import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { Scenery } from './scenery';
 import { randint, choice } from './random';
-import { DiscreteEvent } from './events';
 import { Story } from './stories';
 
 declare var PIXI: any;
+
+class EventManager
+{
+    private randomEvents: any;
+    private nextEventDistance: any;
+    private level: any;
+
+    constructor(level, randomEvents)
+    {
+        this.level = level;
+        this.randomEvents = randomEvents;
+        this.nextEventDistance = 100;
+        this.lastDistance = 0;
+    }
+
+    getNextEvent()
+    {
+        if (this.lastDistance < this.nextEventDistance &&
+            this.nextEventDistance <= this.level.distance)
+        {
+            this.nextEventDistance += randint(100, 150);
+            let func = choice(this.randomEvents);
+            return func(this.level);
+        }
+    }
+}
 
 export class ForestLevel
 {
@@ -36,10 +61,17 @@ export class ForestLevel
     public player: any;
     private totalDistance: number = 1000;
     private distance: number = 0;
-    private nextEventDistance: number = 50;
 
     constructor()
     {
+        this.eventManager = new EventManager(
+            this,
+            [
+                Story.foundCoin,
+                Story.foundFood,
+                Story.foundWater,
+            ]
+        );
         this.stage = new PIXI.Container();
         this.scenery = new Scenery(
             [
@@ -102,51 +134,6 @@ export class ForestLevel
         return this.distance >= this.totalDistance;
     }
 
-    spawnRandomEvent()
-    {
-        function foundCoin()
-        {
-            return new DiscreteEvent(
-                'LUCKY DAY! YOU FOUND A FEW COINS ON THE ROADSIDE',
-                () => {
-                    this.player.money += randint(1, 5);
-                }
-            );
-        }
-        function foundFood()
-        {
-            let msg = choice([
-                'YOU COLLECT SOME TASTY BERRIES FROM A BUSH NEARBY',
-                'YOU COLLECT SOME APPLES FROM A NEARBY APPLE TREE',
-                'YOU DIG UP SOME TASTY ROOT VEGETABLES',
-            ]);
-            return new DiscreteEvent(
-                msg,
-                () => {
-                    this.player.food += randint(1, 3);
-                }
-            );
-        }
-        function foundWater()
-        {
-            return new DiscreteEvent(
-                'YOU COLLECT SOME WATER FROM A NEARBY STREAM',
-                () => {
-                    this.player.water += randint(1, 3);
-                }
-            );
-        }
-        
-        let func = choice([
-            foundCoin,
-            foundFood,
-            foundWater,
-            
-        ]);
-        func = Story.treasureCave;
-        return func.bind(this)(this);
-    }
-
     update(dt)
     {
         let speed = this.player.movementSpeed;
@@ -157,12 +144,9 @@ export class ForestLevel
         let oldDistance = this.distance;
         this.distance += speed*dt;
 
-        // Check if we need to spawn an event
-        if (oldDistance < this.nextEventDistance &&
-            this.distance > this.nextEventDistance)
-        {
-            this.nextEventDistance += randint(100, 150)
-            return this.spawnRandomEvent();
+        let event = this.eventManager.getNextEvent();
+        if (event) {
+            return event;
         }
     }
 }
