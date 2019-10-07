@@ -54,6 +54,13 @@ export class StoryNode
 
     constructor(text, responseData)
     {
+        // Fill in a default response
+        if (!responseData)
+        {
+            responseData = [
+                ['OK', null]
+            ];
+        }
         this.text = text;
         this.responseData = responseData;
     }
