@@ -46,17 +46,22 @@ export class DiscreteEvent
     }
 }
 
+/* Consists of a descriptive block of text (piece of a story) along with
+ * a set of choices the player can make at that point. */
 export class StoryNode
 {
     private text: any;
-    // List of possible responses
+    // List of possible responses. Each element consists of descriptive
+    // text for a button, and the consequence of making that choice.
+    // (which is either the name of the next node, or a function that
+    // returns the name of the next node)
     private responseData: any;
 
     constructor(text, responseData)
     {
-        // Fill in a default response
         if (!responseData)
         {
+            // Fill in a default response
             responseData = [
                 ['OK', null]
             ];
@@ -65,16 +70,20 @@ export class StoryNode
         this.responseData = responseData;
     }
 
+    // Returns a list of possible responses/choices for the player to
+    // make. (list of strings to turn into button labels)
     get responses() {
         return this.responseData.map(r => r[0]);
     }
 
-    // Returns the next node (name)
+    // Returns the consequence of choosing the given option (by number)
     getNextNode(index) {
         return this.responseData[index][1];
     }
 }
 
+/* A story event is a series of pages of text. At the end of each page the player
+ * is given a number of choices for advancing the story. */
 export class StoryEvent
 {
     private storyNodes: any;
@@ -104,6 +113,7 @@ export class StoryEvent
         this.showNode(this.startNode);
     }
 
+    // Displays the text and choices for the given story node.
     showNode(node)
     {
         this.currentNode = node;
@@ -120,6 +130,8 @@ export class StoryEvent
         // Advance to the next node
         let next = this.currentNode.getNextNode(index);
 
+        // The next node could be specified as a function. If so
+        // call that here until the function returns a node name.
         while (typeof next === 'function') {
             next = next();
         }
