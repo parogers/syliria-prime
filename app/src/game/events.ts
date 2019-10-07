@@ -49,6 +49,7 @@ export class DiscreteEvent
 export class StoryNode
 {
     private text: any;
+    // List of possible responses
     private responseData: any;
 
     constructor(text, responseData)
@@ -79,14 +80,7 @@ export class StoryEvent
         this.dialogWindow = new DialogWindow();
         this.dialogWindow.on(
             'selected', index => {
-                // Advance to the next node
-                let next = this.currentNode.getNextNode(index);
-                if (next !== null) {
-                    this.showNode(this.storyNodes[next]);
-                } else {
-                    this.dialogWindow.close();
-                    this.done = true;
-                }
+                this.makeChoice(index);
             }
         );
     }
@@ -110,6 +104,29 @@ export class StoryEvent
             node.text,
             node.responses
         );
+    }
+
+    // Choose a response (given the choice index) on the given story
+    // node, causing the dialog window to advance to the next node.
+    makeChoice(index)
+    {
+        // Advance to the next node
+        let next = this.currentNode.getNextNode(index);
+
+        while (typeof next === 'function') {
+            next = next();
+        }
+        
+        if (!next) {
+            // End of the story
+            this.dialogWindow.close();
+            this.done = true;
+        }
+        else
+        {
+            // Advance to the next node of the story
+            this.showNode(this.storyNodes[next]);
+        }
     }
 
     update(dt) {

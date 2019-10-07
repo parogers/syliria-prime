@@ -20,7 +20,8 @@
 import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { Scenery } from './scenery';
 import { randint, choice } from './random';
-import { DiscreteEvent, StoryEvent, StoryNode } from './events';
+import { DiscreteEvent } from './events';
+import { Story } from './stories';
 
 declare var PIXI: any;
 
@@ -135,32 +136,15 @@ export class ForestLevel
                 }
             );
         }
-        function something()
-        {
-            return new StoryEvent({
-                start: new StoryNode(
-                    'SOMETHING HAPPENED',
-                    [
-                        ['EXPLORE', 'cave'],
-                        ['LEAVE', null],
-                    ]
-                ),
-                cave: new StoryNode(
-                    'THIS IS A CAVE. YOU FIND SOME MONEY.',
-                    [
-                        ['OK', null],
-                    ]
-                ),
-            });
-        }
         
         let func = choice([
             foundCoin,
             foundFood,
             foundWater,
+            
         ]);
-        func = something;
-        return func.bind(this)();
+        func = Story.treasureCave;
+        return func.bind(this)(this);
     }
 
     update(dt)
