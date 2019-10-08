@@ -18,6 +18,7 @@
  */
 
 import { Resource, getTexture } from './resource';
+import { getArg } from './args';
 
 declare var PIXI: any;
 
@@ -71,14 +72,6 @@ export function renderText(text, maxWidth, args?)
 {
     let result = renderTextToBox(text, maxWidth, -1, args);
     return result.container;
-}
-
-function getArg(args, name, defaultValue)
-{
-    if (args && args[name] !== undefined) {
-        return args[name];
-    }
-    return defaultValue;
 }
 
 export function renderTextToBox(text, maxWidth, maxHeight, args?)
