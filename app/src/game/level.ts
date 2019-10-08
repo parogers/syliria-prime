@@ -21,32 +21,85 @@ import { Resource, getTexture, VIEW_WIDTH } from './resource';
 import { Scenery } from './scenery';
 import { randint, choice } from './random';
 import { Story } from './stories';
+import { getArg } from './args';
 
 declare var PIXI: any;
 
+/* Manages the occurance of events within a level */
 class EventManager
 {
     private randomEvents: any;
+    private scripptedEvents: any;
     private nextEventDistance: any;
     private level: any;
+    private eventSpacingMin: number;
+    private eventSpacingMax: number;
 
-    constructor(level, randomEvents)
+    constructor(level, args)
     {
         this.level = level;
-        this.randomEvents = randomEvents;
-        this.nextEventDistance = 100;
+        this.randomEvents = [];
+        this.scriptedEvents = [];
         this.lastDistance = 0;
+        this.eventSpacingMin = getArg(args, 'eventSpacingMin', 100);
+        this.eventSpacingMax = getArg(args, 'eventSpacingMax', 200);
+        this.nextEventDistance = randint(
+            this.eventSpacingMin,
+            this.eventSpacingMax
+        );
     }
 
+    addRandomEvent(func)
+    {
+        this.randomEvents.push(func);
+    }
+
+    addScriptedEvent(distance, func)
+    {
+        this.scriptedEvents.push({
+            distance: distance,
+            func: func,
+        });
+        // Sort the scripted events by distance, so they are presented in the order
+        // they should appear.
+        function cmp(a, b) {
+            return a.distance - b.distance;
+        }
+        this.scriptedEvents.sort(cmp);
+    }
+
+    // Returns the next event, or null if the next event hasn't been triggered yet
     getNextEvent()
     {
+        // Process scripted events first. Only when there are no more should we
+        // check for randomly generated events.
+        if (this.scriptedEvents.length > 0)
+        {
+            let scripted = this.scriptedEvents[0];
+            if (this.lastDistance < scripted.distance &&
+                scripted.distance <= this.level.distance)
+            {
+                this.scriptedEvents.shift();
+                return scripted.func(this.level);
+            }
+            return null;
+        }
+
+        if (this.randomEvents.length === 0) {
+            return null;
+        }
+
         if (this.lastDistance < this.nextEventDistance &&
             this.nextEventDistance <= this.level.distance)
         {
-            this.nextEventDistance += randint(100, 150);
+            this.nextEventDistance += randint(
+                this.eventSpacingMin,
+                this.eventSpacingMax
+            );
             let func = choice(this.randomEvents);
             return func(this.level);
         }
+        return null;
     }
 }
 
@@ -64,14 +117,12 @@ export class ForestLevel
 
     constructor()
     {
-        this.eventManager = new EventManager(
-            this,
-            [
-                Story.foundCoin,
-                Story.foundFood,
-                Story.foundWater,
-            ]
-        );
+        this.eventManager = new EventManager(this);
+//        this.eventManager.addRandomEvent(Story.foundCoin);
+        this.eventManager.addRandomEvent(Story.foundFood);
+        this.eventManager.addRandomEvent(Story.foundWater);
+        this.eventManager.addScriptedEvent(200, Story.foundCoin);
+
         this.stage = new PIXI.Container();
         this.scenery = new Scenery(
             [
