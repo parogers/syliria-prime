@@ -30,22 +30,23 @@ class EventManager
 {
     private randomEvents: any;
     private scripptedEvents: any;
+    // The distance at which the next random event occurs
     private nextEventDistance: any;
-    private level: any;
-    private eventSpacingMin: number;
-    private eventSpacingMax: number;
+    // Min/max period for occurance of random events
+    private randomEventPeriod: number;
 
-    constructor(level, args)
+    constructor(args)
     {
-        this.level = level;
         this.randomEvents = [];
         this.scriptedEvents = [];
-        this.lastDistance = 0;
-        this.eventSpacingMin = getArg(args, 'eventSpacingMin', 100);
-        this.eventSpacingMax = getArg(args, 'eventSpacingMax', 200);
+        this.randomEventPeriod = getArg(
+            args,
+            'randomEventPeriod',
+            [100, 150]
+        );
         this.nextEventDistance = randint(
-            this.eventSpacingMin,
-            this.eventSpacingMax
+            this.randomEventPeriod[0],
+            this.randomEventPeriod[1]
         );
     }
 
@@ -68,36 +69,41 @@ class EventManager
         this.scriptedEvents.sort(cmp);
     }
 
-    // Returns the next event, or null if the next event hasn't been triggered yet
-    getNextEvent()
+    // Returns the next event (function) to be triggered at or before the given distance.
+    // (or null if there is no such event)
+    getNextEvent(distance)
     {
         // Process scripted events first. Only when there are no more should we
         // check for randomly generated events.
         if (this.scriptedEvents.length > 0)
         {
             let scripted = this.scriptedEvents[0];
-            if (this.lastDistance < scripted.distance &&
-                scripted.distance <= this.level.distance)
+            if (scripted.distance <= distance)
             {
                 this.scriptedEvents.shift();
-                return scripted.func(this.level);
+
+                this.nextEventDistance = distance + randint(
+                    this.randomEventPeriod[0],
+                    this.randomEventPeriod[1]
+                );
+                
+                return scripted.func;
             }
             return null;
         }
 
+        // Now process randomly occuring events
         if (this.randomEvents.length === 0) {
             return null;
         }
 
-        if (this.lastDistance < this.nextEventDistance &&
-            this.nextEventDistance <= this.level.distance)
+        if (this.nextEventDistance <= distance)
         {
             this.nextEventDistance += randint(
-                this.eventSpacingMin,
-                this.eventSpacingMax
+                this.randomEventPeriod[0],
+                this.randomEventPeriod[1]
             );
-            let func = choice(this.randomEvents);
-            return func(this.level);
+            return choice(this.randomEvents);
         }
         return null;
     }
@@ -118,8 +124,8 @@ export class ForestLevel
     constructor()
     {
         this.eventManager = new EventManager(this);
-//        this.eventManager.addRandomEvent(Story.foundCoin);
-        this.eventManager.addRandomEvent(Story.foundFood);
+        //this.eventManager.addRandomEvent(Story.foundCoin);
+        //this.eventManager.addRandomEvent(Story.foundFood);
         this.eventManager.addRandomEvent(Story.foundWater);
         this.eventManager.addScriptedEvent(200, Story.foundCoin);
 
@@ -195,9 +201,9 @@ export class ForestLevel
         let oldDistance = this.distance;
         this.distance += speed*dt;
 
-        let event = this.eventManager.getNextEvent();
-        if (event) {
-            return event;
+        let eventFunc = this.eventManager.getNextEvent(this.distance);
+        if (eventFunc) {
+            return eventFunc(this);
         }
     }
 }
