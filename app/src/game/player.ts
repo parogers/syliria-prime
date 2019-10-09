@@ -20,6 +20,8 @@
 import { Resource, getTexture } from './resource';
 import { Animation } from './anim';
 
+declare const PIXI: any;
+
 export const Health = {
     GOOD: 4,
     FAIR: 3,
@@ -36,6 +38,9 @@ export class Player
     public money: number = 0;
     // Player condition
     public health: number;
+    private charSprite: any;
+    private shadowSprite: any;
+    public sprite: any;
 
     constructor()
     {

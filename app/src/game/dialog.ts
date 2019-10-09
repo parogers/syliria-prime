@@ -38,6 +38,12 @@ class Button
     // The callback function triggered when the button is considered
     // to have been pressed. (short delay after it pops up)
     private callbackFunc: any;
+    private buttonDownTexture: any;
+    private buttonUpTexture: any;
+    private buttonContainer: any;
+    private buttonSprite: any;
+    private textSprite: any;
+    private text: string;
 
     constructor(text)
     {
@@ -50,7 +56,7 @@ class Button
         this.buttonSprite = new PIXI.Sprite(this.buttonUpTexture);
 
         this.container = new PIXI.Container();
-        this.textSprite = renderText(text);
+        this.textSprite = renderText(text, -1);
 
         this.container.addChild(this.buttonSprite);
         this.container.addChild(this.textSprite);
@@ -62,6 +68,10 @@ class Button
         this.buttonSprite.on('pointerup', () => this.handleReleased());
 
         this.showButtonUp();
+    }
+
+    get width() {
+        return this.buttonSprite.texture.width;
     }
 
     on(event, func)
@@ -145,6 +155,11 @@ export class DialogWindow
     private text: string;
     private textNextChar: number;
     private callbackFunc: any;
+    private windowSprite: any;
+    private buttonContainer: any;
+    private state: number;
+    private textSprite: any;
+    private responses: any;
 
     constructor()
     {
@@ -218,7 +233,7 @@ export class DialogWindow
             });
             this.buttonContainer.addChild(button.container);
             this.buttons.push(button);
-            x += button.buttonSprite.width+2;
+            x += button.width+2;
         }
     }
 
@@ -271,6 +286,9 @@ export class MessageBox
     private textPosY = 5;
     private callbackFunc: any;
     public closed: boolean = false;
+    private textSprite: any;
+    private okayButton: any;
+    private windowSprite: any;
 
     constructor(text, buttonText?)
     {

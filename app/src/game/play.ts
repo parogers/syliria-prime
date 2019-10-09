@@ -35,10 +35,15 @@ export class PlayScreen
     private STATE_PLAYER_ENTER = 1;
     private STATE_GAMEPLAY = 2;
     private STATE_PLAYER_EXIT = 3;
+    private STATE_EVENT = 4;
 
     private state: number;
-    private _level: Level;
+    private _level: any;
     private hud: any;
+    private currentEvent: any;
+    public player: any;
+    public window: any;
+    public stage: any;
 
     constructor() {
         this.state = this.STATE_INFO_DUMP;
@@ -50,8 +55,7 @@ export class PlayScreen
         this.player = new Player();
         this.level = new ForestLevel();
 
-        this.hud = new HUD();
-        this.hud.player = this.player;
+        this.hud = new HUD(this.player);
         this.stage.addChild(this.hud.container);
 
         /*// Example text
@@ -123,9 +127,20 @@ export class PlayScreen
             this.player.update(dt);
             //this.text.update(dt);
 
-            this.level.update(dt);
+            let event = this.level.update(dt);
             if (this.level.done) {
                 this.state = this.STATE_PLAYER_EXIT;
+            } else if (event) {
+                this.state = this.STATE_EVENT;
+                this.currentEvent = event;
+                this.currentEvent.start(this);
+            }
+        }
+        else if (this.state === this.STATE_EVENT) {
+            this.currentEvent.update(dt);
+            if (this.currentEvent.done) {
+                this.state = this.STATE_GAMEPLAY;
+                this.currentEvent = null;
             }
         }
         else if (this.state === this.STATE_PLAYER_EXIT) {
@@ -141,15 +156,5 @@ export class PlayScreen
         if (this.window) this.window.update(dt);
         this.hud.level = this.level;
         this.hud.update(dt);
-
-
-        this.currentTime += dt;
-        if (this.currentTime - this.lastTime > 2) {
-            this.lastTime = this.currentTime;
-            this.player.money++;
-        }
     }
-
-    private currentTime: number = 0;
-    private lastTime: number = 0;
 }

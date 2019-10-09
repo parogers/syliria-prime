@@ -18,6 +18,7 @@
  */
 
 import { Resource, getTexture } from './resource';
+import { getArg } from './args';
 
 declare var PIXI: any;
 
@@ -52,7 +53,7 @@ export class FadeInText
             this.container.children[after].alpha = 0.5;
         }
         
-        for (let n = this.current|0; n <= next|0; n++) {
+        for (let n = (this.current|0); n <= (next|0); n++) {
             // Have the letters appear over time
             this.container.children[n].alpha = 1;
         }
@@ -71,14 +72,6 @@ export function renderText(text, maxWidth, args?)
 {
     let result = renderTextToBox(text, maxWidth, -1, args);
     return result.container;
-}
-
-function getArg(args, name, defaultValue)
-{
-    if (args && args[name] !== undefined) {
-        return args[name];
-    }
-    return defaultValue;
 }
 
 export function renderTextToBox(text, maxWidth, maxHeight, args?)
