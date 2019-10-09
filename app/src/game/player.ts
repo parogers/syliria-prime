@@ -53,7 +53,7 @@ export class Player
 
         this.charSprite = new PIXI.Sprite();
         this.charSprite.texture = this.anim.update(0);
-        this.charSprite.anchor.set(0.5, 1)
+        this.charSprite.anchor.set(0.6, 1)
 
         this.shadowSprite = new PIXI.Sprite(
             getTexture(Resource.CHARS, 'shadow')
