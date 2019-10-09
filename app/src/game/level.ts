@@ -29,7 +29,7 @@ declare var PIXI: any;
 class EventManager
 {
     private randomEvents: any;
-    private scripptedEvents: any;
+    private scriptedEvents: any;
     // The distance at which the next random event occurs
     private nextEventDistance: any;
     // Min/max period for occurance of random events
@@ -120,6 +120,7 @@ export class ForestLevel
     public player: any;
     private totalDistance: number = 1000;
     private distance: number = 0;
+    private eventManager: EventManager;
 
     constructor()
     {

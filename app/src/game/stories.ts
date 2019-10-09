@@ -20,7 +20,7 @@
 import { randint, choice } from './random';
 import { DiscreteEvent, StoryEvent, StoryNode } from './events';
 
-export var Story = {};
+export var Story: any = {};
 
 Story.abandonedGrave = function(level)
 {
