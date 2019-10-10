@@ -1,47 +1,72 @@
 {"frames": {
 
-"player1.png":
+"player-idle.png":
 {
-	"frame": {"x":1,"y":1,"w":8,"h":13},
+	"frame": {"x":1,"y":1,"w":8,"h":14},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":13},
-	"sourceSize": {"w":8,"h":13}
+	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":14},
+	"sourceSize": {"w":8,"h":14}
 },
-"player2.png":
+"player-stick-idle.png":
 {
-	"frame": {"x":10,"y":1,"w":8,"h":13},
+	"frame": {"x":10,"y":1,"w":11,"h":14},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":13},
-	"sourceSize": {"w":8,"h":13}
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":14},
+	"sourceSize": {"w":11,"h":14}
 },
-"player3.png":
+"player-stick-walk1.png":
 {
-	"frame": {"x":19,"y":1,"w":8,"h":13},
+	"frame": {"x":22,"y":1,"w":12,"h":14},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":13},
-	"sourceSize": {"w":8,"h":13}
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":14},
+	"sourceSize": {"w":12,"h":14}
+},
+"player-stick-walk2.png":
+{
+	"frame": {"x":35,"y":1,"w":12,"h":14},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":14},
+	"sourceSize": {"w":12,"h":14}
+},
+"player-walk1.png":
+{
+	"frame": {"x":48,"y":1,"w":8,"h":14},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":14},
+	"sourceSize": {"w":8,"h":14}
+},
+"player-walk2.png":
+{
+	"frame": {"x":57,"y":1,"w":8,"h":14},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":14},
+	"sourceSize": {"w":8,"h":14}
 },
 "shadow.png":
 {
-	"frame": {"x":28,"y":1,"w":5,"h":3},
+	"frame": {"x":66,"y":1,"w":5,"h":3},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":5,"h":3},
 	"sourceSize": {"w":5,"h":3}
 }},
 "animations": {
-	"player": ["player1.png","player2.png","player3.png"]
+	"player-stick-walk": ["player-stick-walk1.png","player-stick-walk2.png"],
+	"player-walk": ["player-walk1.png","player-walk2.png"]
 },
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "characters.png",
 	"format": "RGBA8888",
-	"size": {"w":34,"h":15},
+	"size": {"w":72,"h":16},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:317366e632b3822afe605024b2087a49:5b847a4ea9ddafc514e145bee0642d7e:a5fe7db4b869eb0f3e0b2940b9577ea8$"
+	"smartupdate": "$TexturePacker:SmartUpdate:be39f2c979542fb6832ed3e234fedd9a:d12c9130fff57d1c511da37efa4fa77c:a5fe7db4b869eb0f3e0b2940b9577ea8$"
 }
 }

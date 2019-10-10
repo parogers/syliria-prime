@@ -46,22 +46,22 @@ export class Player
     {
         this.health = Health.GOOD;
         this.anim = new Animation([
-            getTexture(Resource.CHARS, 'player2'),
-            getTexture(Resource.CHARS, 'player3'),
-        ], 8);
+            getTexture(Resource.CHARS, 'player-stick-walk1'),
+            getTexture(Resource.CHARS, 'player-stick-walk2'),
+        ], 6);
         this.sprite = new PIXI.Container();
 
         this.charSprite = new PIXI.Sprite();
         this.charSprite.texture = this.anim.update(0);
         this.charSprite.anchor.set(0.6, 1)
 
-        this.shadowSprite = new PIXI.Sprite(
-            getTexture(Resource.CHARS, 'shadow')
-        );
-        this.shadowSprite.anchor.set(0.5, 0.6)
-        this.shadowSprite.scale.set(1.2, 1);
+        // this.shadowSprite = new PIXI.Sprite(
+        //     getTexture(Resource.CHARS, 'shadow')
+        // );
+        // this.shadowSprite.anchor.set(0.5, 0.6)
+        // this.shadowSprite.scale.set(1.2, 1);
 
-        this.sprite.addChild(this.shadowSprite);
+        // this.sprite.addChild(this.shadowSprite);
         this.sprite.addChild(this.charSprite)
     }
 
