@@ -181,18 +181,45 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">player1.png</key>
-            <key type="filename">player2.png</key>
-            <key type="filename">player3.png</key>
+            <key type="filename">player-idle.png</key>
+            <key type="filename">player-walk1.png</key>
+            <key type="filename">player-walk2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>2,2,3,3</rect>
+                <rect>2,3,4,7</rect>
                 <key>scale9Paddings</key>
-                <rect>2,2,3,3</rect>
+                <rect>2,3,4,7</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">player-stick-idle.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,5,7</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,5,7</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">player-stick-walk1.png</key>
+            <key type="filename">player-stick-walk2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,6,7</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,6,7</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -212,10 +239,13 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>player1.png</filename>
-            <filename>player2.png</filename>
-            <filename>player3.png</filename>
             <filename>shadow.png</filename>
+            <filename>player-idle.png</filename>
+            <filename>player-stick-idle.png</filename>
+            <filename>player-stick-walk1.png</filename>
+            <filename>player-stick-walk2.png</filename>
+            <filename>player-walk1.png</filename>
+            <filename>player-walk2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

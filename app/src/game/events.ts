@@ -57,7 +57,7 @@ export class StoryNode
     // returns the name of the next node)
     private responseData: any;
 
-    constructor(text, responseData)
+    constructor(text, responseData?)
     {
         if (!responseData)
         {
@@ -89,6 +89,7 @@ export class StoryEvent
     private storyNodes: any;
     private currentNode: StoryNode;
     public done: boolean = false;
+    private dialogWindow: DialogWindow;
 
     constructor(storyNodes)
     {
