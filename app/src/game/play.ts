@@ -68,7 +68,7 @@ export class PlayScreen
         this.text = text;*/
 
         this.window = new DialogWindow();
-        this.window.showContent('This is the introductory text. This is where the plot is explained.', ['OK']);
+        this.window.showContent('This is the introductory text. This is where the plot is explained. Another thing is an apple.', ['OK']);
         this.window.on('selected', response => {
             this.window.close();
             this.window = null;

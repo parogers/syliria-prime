@@ -15,7 +15,6 @@ export var Resource = {
     LETTERS: 'assets/media/letters.json',
     GUI: 'assets/media/gui.json',
     ITEMS: 'assets/media/items.json',
-    FONT: 'assets/gui/test.fnt',
 };
 
 export function getTexture(resName, spriteName?)
