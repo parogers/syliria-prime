@@ -22,7 +22,7 @@ import { getArg } from './args';
 
 declare var PIXI: any;
 
-const TEXT_SCALE = 0.6;
+const TEXT_SCALE = 0.35;
 const DEFAULT_COLOR = 0xffffff;
 
 export class FadeInText
@@ -76,7 +76,7 @@ export function renderText(text, maxWidth, args?)
 
 export function renderTextToBox(text, maxWidth, maxHeight, args?)
 {
-    let vspacing = 2, hspacing = 1;
+    let vspacing = 3, hspacing = 1;
     let container = new PIXI.Container();
     let x = 0;
     let y = 0;

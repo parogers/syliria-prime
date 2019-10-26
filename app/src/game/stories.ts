@@ -118,7 +118,7 @@ Story.treasureCave = function(level)
 Story.foundCoin = function(level)
 {
     return new DiscreteEvent(
-        'LUCKY DAY! YOU FOUND A FEW COINS ON THE ROADSIDE',
+        'Lucky day! You find a few coins on the roadside.',
         () => {
             level.player.money += randint(1, 5);
         }

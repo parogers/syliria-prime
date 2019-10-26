@@ -19,7 +19,34 @@
 
 import { Resource } from './resource';
 
+declare var EZGUI: any;
 declare var PIXI: any;
+
+function loadResources()
+{
+    return new Promise((resolve, reject) => {
+        PIXI.loader.load(resolve)
+
+    }).then(() => {
+        console.log('done loading assets');
+
+        // Clean up texture names by removing the trailing '.png' extensions
+        // (included automatically by TexturePacker)
+        for (let resName in PIXI.loader.resources)
+        {
+            let res = PIXI.loader.resources[resName];
+            if (res.textures === undefined) continue
+
+            for (let name in res.textures)
+            {
+                if (name.endsWith('.png')) {
+                    let newName = name.slice(0, -4);
+                    res.textures[newName] = res.textures[name];
+                }
+            }
+        }
+    });
+}
 
 export class LoadingScreen
 {
@@ -40,25 +67,7 @@ export class LoadingScreen
             PIXI.loader.add(Resource[resName]);
         }
 
-        PIXI.loader.load(() => {
-            console.log('done loading assets');
-
-            // Clean up texture names by removing the trailing '.png' extensions
-            // (included automatically by TexturePacker)
-            for (let resName in PIXI.loader.resources)
-            {
-                let res = PIXI.loader.resources[resName];
-                if (res.textures === undefined) continue
-
-                for (let name in res.textures)
-                {
-                    if (name.endsWith('.png')) {
-                        let newName = name.slice(0, -4);
-                        res.textures[newName] = res.textures[name];
-                    }
-                }
-            }
-            
+        loadResources().then(() => {
             this.done = true;
         });
     }
