@@ -65,17 +65,17 @@ Story.treasureCave = function(level)
 {
     return new StoryEvent({
         start: new StoryNode(
-            'YOU SPOT A CAVE OFF THE ROAD. THE ENTRANCE IS OVERGROWN WITH VINES AND YOU ALMOST MISSED IT. YOU\'RE TEMPTED TO DO SOME EXPLORING.',
+            'You spot a cave off the road. The entrance is overgrown with vines and you almost missed it. You\'re tempted to do some exploring.',
             [
                 ['EXPLORE', 'cave'],
                 ['LEAVE', 'leave'],
             ]
         ),
         leave: new StoryNode(
-            'YOU DECIDE NO GOOD CAN COME OF EXPLORING THIS CAVE. YOU HEAD BACK TO THE PATH.',
+            'You decide no good can come of exploring this cave. You head back to the path.',
         ),
         cave: new StoryNode(
-            'YOU VENTURE A LITTLE FURTHER INTO THE CAVE. THE PASSAGE IS BECOMMING CRAMPED AND NARROW. FEELING ANXIOUS, YOU HESITATE A MOMENT.',
+            'You venture a little further into the cave. The passage is becomming cramped and narrow. Feeling anxious, you hesitate a moment.',
             [
                 [
                     'GO ON',
@@ -85,10 +85,10 @@ Story.treasureCave = function(level)
             ]
         ),
         nothing: new StoryNode(
-            'YOU CONTINUE SEARCHING THE CAVE BUT FIND NOTHING. DISAPPOINTED, YOU RETURN TO THE PATH.'
+            'You continue searching the cave but find nothing. Disappointed, you return to the path.'
         ),
         lost: new StoryNode(
-            'YOU STUMBLE AROUND IN THE DARKNESS FOR ALMOST AN HOUR BEFORE FINDING YOUR WAY BACK OUT AGAIN. IN THE PROCESS SOME ITEMS SLIP FROM YOUR PACK.',
+            'You stumble around in the darkness for almost an hour before finding your way back out again. In the process some items slip from your pack.',
             [
                 [
                     'OK',
@@ -101,7 +101,7 @@ Story.treasureCave = function(level)
             ]
         ),
         treasure: new StoryNode(
-            'THE TUNNEL OPENS TO A LARGE CAVERNOUS ROOM. IN THE MIDDLE OF THE ROOM YOU SPOT A SMALL TREASURE CHEST FULL OF COINS! HOW FORTUNATE!',
+            'The tunnel opens to a large cavernous room. In the middle of the room you spot a small treasure chest full of coins! How fortunate!',
             [
                 [
                     'OK',
@@ -118,7 +118,7 @@ Story.treasureCave = function(level)
 Story.foundCoin = function(level)
 {
     return new DiscreteEvent(
-        'LUCKY DAY! YOU FOUND A FEW COINS ON THE ROADSIDE',
+        'Lucky day! You find a few coins on the roadside.',
         () => {
             level.player.money += randint(1, 5);
         }
@@ -128,9 +128,9 @@ Story.foundCoin = function(level)
 Story.foundFood = function(level)
 {
     let msg = choice([
-        'YOU COLLECT SOME TASTY BERRIES FROM A BUSH NEARBY',
-        'YOU COLLECT SOME APPLES FROM A NEARBY APPLE TREE',
-        'YOU DIG UP SOME TASTY ROOT VEGETABLES',
+        'You collect some tasty berries from a bush nearby',
+        'You collect some apples from a nearby apple tree',
+        'You dig up some tasty root vegetables',
     ]);
     return new DiscreteEvent(
         msg,
@@ -143,7 +143,7 @@ Story.foundFood = function(level)
 Story.foundWater = function(level)
 {
     return new DiscreteEvent(
-        'YOU COLLECT SOME WATER FROM A NEARBY STREAM',
+        'You collect some water from a nearby stream',
         () => {
             level.player.water += randint(1, 3);
         }

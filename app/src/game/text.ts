@@ -22,8 +22,9 @@ import { getArg } from './args';
 
 declare var PIXI: any;
 
-const TEXT_SCALE = 0.6;
-const DEFAULT_COLOR = 0xffffff;
+const TEXT_SCALE = 0.3;
+const DEFAULT_COLOR = 0x000000;
+const DEFAULT_SHADOW_COLOR = 0x000000;
 
 export class FadeInText
 {
@@ -76,7 +77,7 @@ export function renderText(text, maxWidth, args?)
 
 export function renderTextToBox(text, maxWidth, maxHeight, args?)
 {
-    let vspacing = 2, hspacing = 1;
+    let vspacing = 3, hspacing = 1;
     let container = new PIXI.Container();
     let x = 0;
     let y = 0;
@@ -84,6 +85,8 @@ export function renderTextToBox(text, maxWidth, maxHeight, args?)
     let wordWidth = 0;
     let wordHeight = 0;
     let color = getArg(args, 'color', DEFAULT_COLOR);
+    let dropShadow = getArg(args, 'dropShadow', true);
+    let dropShadowColor = getArg(args, 'dropShadowColor', DEFAULT_SHADOW_COLOR);
 
     // Adjust the maximum text width based on how much we down scale it
     if (maxWidth > 0) maxWidth /= TEXT_SCALE;
@@ -117,13 +120,24 @@ export function renderTextToBox(text, maxWidth, maxHeight, args?)
                     };
                 }
             }
-            for (let other of word) {
+            for (let other of word)
+            {
+                if (dropShadow) {
+                    let sprite = new PIXI.Sprite(other);
+                    sprite.tint = DEFAULT_SHADOW_COLOR;
+                    sprite.alpha = 0.25;
+                    sprite.x = x+0.5;
+                    sprite.y = y+0.75;
+                    container.addChild(sprite);
+                }
+
                 let sprite = new PIXI.Sprite(other);
                 sprite.tint = color;
                 sprite.x = x;
                 sprite.y = y;
-                x += other.width + hspacing;
                 container.addChild(sprite);
+
+                x += other.width + hspacing;
             }
             word = [];
             wordWidth = 0;
